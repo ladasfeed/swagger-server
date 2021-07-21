@@ -50,6 +50,5 @@ export const initMethod = (data: swaggerType) => {
             routes: arrayOfRoutersPathnames,
             path: './dist'
         })
-        console.log(arrayOfRoutersPathnames)
     }
 }

@@ -13,7 +13,6 @@ export const createRootFile = ({routes, path}:createRootFileType) => {
         bodyMain += `app.use(route${index}) \n`
     })
 
-    console.log(bodyHeader)
     fs.writeFile(
         path+'/index.ts',
         `export {}

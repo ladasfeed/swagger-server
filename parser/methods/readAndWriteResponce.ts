@@ -21,14 +21,29 @@ export const readAndWriteData = (ref: string | Object) => {
     let props:any = ref
 
     if (typeof ref == "string") {
-        const pathArray = ref.substr(3).split('/')
-        props = swagger.components.schemas[pathArray[2]].properties as any
+        const pathArray = ref.substr(2).split('/')
+        if (ref == '#/components/schemas/userId') {
+            console.log(pathArray)
+            console.log(swagger.components.schemas.userId)
+        }
+        const field = swagger.components.schemas[pathArray[2]]
+
+        if (field.hasOwnProperty('type') && ['boolean', 'string', 'integer'].includes(field.type)) {
+            props = field
+        } else {
+            props = field.properties as any
+        }
     }
 
-    // console.log(props)
-    // console.log(ref)
-    // console.log('_____________')
+    if (ref == '#/components/schemas/userId') {
+        console.log(props)
+        console.log(ref)
+    }
 
+    if (props.hasOwnProperty('example')) {
+        newObj = props.example
+        return newObj
+    }
 
     for (let key in props) {
         if (props[key].hasOwnProperty('example')) {

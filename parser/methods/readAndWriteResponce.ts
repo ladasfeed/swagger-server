@@ -1,5 +1,3 @@
-import {log} from "util";
-
 const swagger = require('../swagger.json')
 
 const deepSearch = (obj: any) => {
@@ -20,24 +18,16 @@ export const readAndWriteData = (ref: string | Object) => {
     let newObj:any = {}
     let props:any = ref
 
+
+
     if (typeof ref == "string") {
         const pathArray = ref.substr(2).split('/')
-        if (ref == '#/components/schemas/userId') {
-            console.log(pathArray)
-            console.log(swagger.components.schemas.userId)
-        }
         const field = swagger.components.schemas[pathArray[2]]
-
         if (field.hasOwnProperty('type') && ['boolean', 'string', 'integer'].includes(field.type)) {
             props = field
         } else {
             props = field.properties as any
         }
-    }
-
-    if (ref == '#/components/schemas/userId') {
-        console.log(props)
-        console.log(ref)
     }
 
     if (props.hasOwnProperty('example')) {
@@ -50,6 +40,7 @@ export const readAndWriteData = (ref: string | Object) => {
             newObj[key] = props[key].example
         }
         else if (props[key].hasOwnProperty('type') && props[key].type == 'array') {
+
             newObj[key] = [readAndWriteData(props[key].items)]
         }
         else if (props[key].hasOwnProperty('type') && props[key].type == 'object' && props[key].hasOwnProperty('properties')) {

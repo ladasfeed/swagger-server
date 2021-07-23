@@ -1,74 +1,290 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "E-Tutor API",
+    "title": "Smart Service Draft API",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": ""
+      "url": "https://api.iqluean.ru/api/v1"
     }
   ],
   "paths": {
-    "/user": {
+    "/user/{user_id}/merchant": {
+      "post": {
+        "tags": [
+          "Merchant"
+        ],
+        "summary": "Регистрация мерча",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMerchantRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "CREATED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MerchantFullDataResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Ошибка валидации)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized (Не авторизован)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
       "get": {
         "tags": [
-          "User"
+          "Merchant"
         ],
-        "summary": "Поиск всех учеников / учителей по фильтру",
+        "summary": "Получение мерчей пользователя (в данный момент мерч будет один)",
         "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMerchantResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Ошибка валидации)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (Не найдено)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/user/{user_id}/merchant/{merchant_id}": {
+      "put": {
+        "tags": [
+          "Merchant"
+        ],
+        "summary": "Изменение данных мерча",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "id пользователя",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "id мерчанта",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateMerchantRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getMerchantFullDataResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Ошибка валидации)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (Не найдено)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/user/{user_id}/merchant/{merchant_id}/address": {
+      "get": {
+        "tags": [
+          "Address"
+        ],
+        "summary": "Получить все адреса пользователя",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "id пользователя",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "id мерчанта",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "type",
             "in": "query",
-            "description": "Тип пользователя",
+            "description": "Тип адреса",
             "required": false,
             "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "subject_id",
-            "in": "query",
-            "description": "Идентификатор предмета обучения",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "education_system_id",
-            "in": "query",
-            "description": "Идентификатор системы образования",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "language_id",
-            "in": "query",
-            "description": "Идентификатор языка",
-            "required": false,
-            "schema": {
-              "type": "integer"
+              "type": "string",
+              "enum": [
+                "delivery",
+                "legal"
+              ]
             }
           },
           {
             "name": "limit",
             "in": "query",
-            "description": "Лимит количества строк в ответе",
-            "required": true,
+            "description": "Лимит",
+            "required": false,
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
             "name": "offset",
             "in": "query",
-            "description": "Количество строк от начала выборки, которые были пропущены",
-            "required": true,
+            "description": "Офсет",
+            "required": false,
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           }
         ],
@@ -78,7 +294,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/getUsersByFilterResponse"
+                  "$ref": "#/components/schemas/getMerchantAddressesDataResponse"
                 }
               }
             }
@@ -93,8 +309,70 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found (Не найдено)",
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Address"
+        ],
+        "summary": "Добавляем адрес",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "id пользователя",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "id мерчанта",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAddressRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "CREATED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getMerchantAddressDataResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Ошибка валидации)",
             "content": {
               "application/json": {
                 "schema": {
@@ -121,19 +399,38 @@
         ]
       }
     },
-    "/user/{user_id}": {
+    "/user/{user_id}/merchant/{merchant_id}/address/{address_id}": {
       "get": {
         "tags": [
-          "User"
+          "Address"
         ],
-        "summary": "Получение данных о юзере",
+        "summary": "Получить адрес пользователя",
         "parameters": [
           {
             "name": "user_id",
             "in": "path",
+            "description": "id пользователя",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "id мерчанта",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "address_id",
+            "in": "path",
+            "description": "id адреса",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -143,23 +440,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/getUserResponse"
+                  "$ref": "#/components/schemas/getMerchantAddressDataResponse"
                 }
               }
             }
           },
           "400": {
             "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
             "content": {
               "application/json": {
                 "schema": {
@@ -187,298 +474,9 @@
       },
       "put": {
         "tags": [
-          "User"
+          "Address"
         ],
-        "summary": "Заполнение данных о юзере",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/putUserRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getUserResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      },
-      "patch": {
-        "tags": [
-          "User"
-        ],
-        "summary": "Смена статуса юзера",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/patchUserRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": "NO_CONTENT"
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/user/{user_id}/file": {
-      "post": {
-        "tags": [
-          "User"
-        ],
-        "summary": "Загрузка файлов при регистрации юзера",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/postUsersFileRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "CREATED",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/postFileResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/user/{user_id}/event": {
-      "post": {
-        "tags": [
-          "Event"
-        ],
-        "summary": "Создание Event-a Teacher-ом",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/postEventRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "CREATED",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/postEventResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/user/{user_id}/event/{event_id}/slot/{slot_id}": {
-      "delete": {
-        "tags": [
-          "Slot"
-        ],
-        "summary": "Удаление данного и последующих слотов ивента (только для учителя)",
+        "summary": "Редактирование адреса",
         "parameters": [
           {
             "name": "user_id",
@@ -490,388 +488,18 @@
             }
           },
           {
-            "name": "event_id",
+            "name": "merchant_id",
             "in": "path",
-            "description": "id Event-а",
+            "description": "id мерчанта",
             "required": true,
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "slot_id",
+            "name": "address_id",
             "in": "path",
-            "description": "id слота",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "NO_CONTENT"
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/user/{user_id}/slot": {
-      "get": {
-        "tags": [
-          "Slot"
-        ],
-        "summary": "Получить данные о всех слотах учителя",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "Лимит количества строк в ответе",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "description": "Количество строк от начала выборки, которые были пропущены",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getSlotsResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/user/{user_id}/slot/{slot_id}": {
-      "delete": {
-        "tags": [
-          "Slot"
-        ],
-        "summary": "Удаляет слот",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "slot_id",
-            "in": "path",
-            "description": "id слота",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "NO_CONTENT"
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/user/{user_id}/notebook": {
-      "get": {
-        "tags": [
-          "User"
-        ],
-        "summary": "Получить данные о блокноте",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getNotebookResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/invite": {
-      "get": {
-        "tags": [
-          "Invite"
-        ],
-        "summary": "Отдаёт данные обо всех приглашениях по фильтрам",
-        "parameters": [
-          {
-            "name": "slot_id",
-            "in": "query",
-            "description": "id слота",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "role",
-            "in": "query",
-            "description": "Роль запрашивающего. Если роль - учитель, то отдает инвайты, которые кидали ученики на занятие с учителем. Если роль - ученик, то отдает инвайты, которые кидал этот ученик другим учителям",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "Лимит количества строк в ответе",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "description": "Количество строк от начала выборки, которые были пропущены",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getInviteResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/slot/{slot_id}/invite": {
-      "post": {
-        "tags": [
-          "Invite"
-        ],
-        "summary": "Создаёт приглашение по слоту",
-        "parameters": [
-          {
-            "name": "slot_id",
-            "in": "path",
-            "description": "id слота",
+            "description": "id адреса",
             "required": true,
             "schema": {
               "type": "string"
@@ -882,355 +510,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/postInviteRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "CREATED",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/postInviteResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/slot/{slot_id}/invite/{invite_id}": {
-      "delete": {
-        "tags": [
-          "Invite"
-        ],
-        "summary": "Удаляет приглашение",
-        "parameters": [
-          {
-            "name": "slot_id",
-            "in": "path",
-            "description": "id слота",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "invite_id",
-            "in": "path",
-            "description": "id приглашения",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "NO_CONTENT"
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/invite/{invite_id}/file": {
-      "post": {
-        "tags": [
-          "Invite"
-        ],
-        "summary": "Прикрепляет файл к инвайту",
-        "parameters": [
-          {
-            "name": "invite_id",
-            "in": "path",
-            "description": "id приглашения",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/requestFileData"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "CREATED",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/postInviteResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/invite/{invite_id}/lesson": {
-      "post": {
-        "tags": [
-          "Lesson"
-        ],
-        "summary": "Создаёт урок из приглашения",
-        "parameters": [
-          {
-            "name": "invite_id",
-            "in": "path",
-            "description": "id приглашения",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "CREATED",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/lessonResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/lesson/{lesson_id}": {
-      "get": {
-        "tags": [
-          "Lesson"
-        ],
-        "summary": "Достаёт данные об уроке",
-        "parameters": [
-          {
-            "name": "lesson_id",
-            "in": "path",
-            "description": "id урока",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/lessonResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      },
-      "put": {
-        "tags": [
-          "Lesson"
-        ],
-        "summary": "Обновляет данные об уроке",
-        "parameters": [
-          {
-            "name": "lesson_id",
-            "in": "path",
-            "description": "id урока",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/putLessonRequest"
+                "$ref": "#/components/schemas/CreateAddressRequest"
               }
             }
           }
@@ -1241,23 +521,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/lessonResponse"
+                  "$ref": "#/components/schemas/getMerchantAddressDataResponse"
                 }
               }
             }
           },
           "400": {
             "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
             "content": {
               "application/json": {
                 "schema": {
@@ -1285,14 +555,32 @@
       },
       "delete": {
         "tags": [
-          "Lesson"
+          "Address"
         ],
-        "summary": "Удаляет урок",
+        "summary": "Удаление адреса",
         "parameters": [
           {
-            "name": "lesson_id",
+            "name": "user_id",
             "in": "path",
-            "description": "id урока",
+            "description": "id пользователя",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "id мерчанта",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "address_id",
+            "in": "path",
+            "description": "id адреса",
             "required": true,
             "schema": {
               "type": "string"
@@ -1301,20 +589,10 @@
         ],
         "responses": {
           "204": {
-            "description": "NO_CONTENT"
+            "description": "NO CONTENT"
           },
           "400": {
             "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
             "content": {
               "application/json": {
                 "schema": {
@@ -1341,56 +619,117 @@
         ]
       }
     },
-    "/lesson": {
+    "/user/{user_id}/merchant/{merchant_id}/order": {
       "get": {
         "tags": [
-          "Lesson"
+          "Order"
         ],
-        "summary": "Поиск всех своих уроков по фильтру",
+        "summary": "Получить все заказы пользователя, отсортированые по дате по умолчанию",
         "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "id пользователя",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "id мерчанта",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "date_from",
             "in": "query",
-            "description": "искать все уроки, начиная с этой даты",
+            "description": "дата от",
             "required": false,
             "schema": {
+              "format": "date-time",
               "type": "string"
             }
           },
           {
             "name": "date_to",
             "in": "query",
-            "description": "искать все уроки до этой даты",
+            "description": "дата до",
             "required": false,
             "schema": {
+              "format": "date-time",
               "type": "string"
             }
           },
           {
-            "name": "role",
+            "name": "amount_from",
             "in": "query",
-            "description": "студент или учитель",
+            "description": "сумма заказ от",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           },
           {
-            "name": "limit",
+            "name": "amount_to",
             "in": "query",
-            "description": "Лимит количества строк в ответе",
-            "required": true,
+            "description": "сумма заказа до",
+            "required": false,
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           },
           {
-            "name": "offset",
+            "name": "statuses",
             "in": "query",
-            "description": "Количество строк от начала выборки, которые были пропущены",
-            "required": true,
+            "description": "массив статусов",
+            "required": false,
             "schema": {
-              "type": "string"
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "new (новый)",
+                  "in_processing (в обработке)",
+                  "transferred_to_production (передан в производство)",
+                  "handed_over_to_courier (передан курьеру)",
+                  "completed (завершен)",
+                  "awaiting_courier_appointment (ожидает назначения курьера)",
+                  "canceled (отменен)",
+                  "handed_over_to_receiver (передан приемщику)",
+                  "problem (проблемный)"
+                ]
+              }
+            }
+          },
+          {
+            "name": "is_rush",
+            "in": "query",
+            "description": "Флаг срочности заказа",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "one_time",
+            "in": "query",
+            "description": "Разовый заказ",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "repeat",
+            "in": "query",
+            "description": "Повторяющийся заказ",
+            "required": false,
+            "schema": {
+              "type": "boolean"
             }
           }
         ],
@@ -1400,237 +739,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/getLessonsByFilterResponse"
+                  "$ref": "#/components/schemas/getMerchantOrdersResponse"
                 }
               }
             }
           },
           "400": {
             "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/lesson/{lesson_id}/vote": {
-      "post": {
-        "tags": [
-          "Lesson"
-        ],
-        "summary": "Оценка урока учеником",
-        "parameters": [
-          {
-            "name": "lesson_id",
-            "in": "path",
-            "description": "id урока",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/postVoteRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "CREATED",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/postVoteResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/chat": {
-      "post": {
-        "tags": [
-          "Chat"
-        ],
-        "summary": "Создаёт чат",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/postChatRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "CREATED",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/postChatResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/user/{user_id}/application": {
-      "post": {
-        "tags": [
-          "Application"
-        ],
-        "summary": "Создаёт заявку",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id студента",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/postApplicationRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "CREATED",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/applicationResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
             "content": {
               "application/json": {
                 "schema": {
@@ -1656,159 +771,25 @@
           }
         ]
       },
-      "get": {
-        "tags": [
-          "Application"
-        ],
-        "summary": "Возвращает данные о заявке",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id студента",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/applicationResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/user/{user_id}/application/{application_id}": {
-      "delete": {
-        "tags": [
-          "Application"
-        ],
-        "summary": "Удвляет заявку",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id студента",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "application_id",
-            "in": "path",
-            "description": "id заявки",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "NO_CONTENT"
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/user/{user_id}/application/{application_id}/file": {
       "post": {
         "tags": [
-          "Application"
+          "Order"
         ],
-        "summary": "Прикрепляет файл к заявке",
+        "summary": "Создание заказа",
         "parameters": [
           {
             "name": "user_id",
             "in": "path",
-            "description": "id студента",
+            "description": "id пользователя",
             "required": true,
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "application_id",
+            "name": "merchant_id",
             "in": "path",
-            "description": "id заявки",
+            "description": "id мерчанта",
             "required": true,
             "schema": {
               "type": "string"
@@ -1819,7 +800,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/requestFileData"
+                "$ref": "#/components/schemas/createOrderRequest"
               }
             }
           }
@@ -1830,23 +811,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/fileResponse"
+                  "$ref": "#/components/schemas/OrdersResponse"
                 }
               }
             }
           },
           "400": {
             "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
             "content": {
               "application/json": {
                 "schema": {
@@ -1865,34 +836,38 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
+        }
       }
     },
-    "/user/{user_id}/file/{file_id}": {
+    "/user/{user_id}/merchant/{merchant_id}/order/{order_id}": {
       "get": {
         "tags": [
-          "User"
+          "Order"
         ],
-        "summary": "Возвращает файл студента/учителя",
+        "summary": "Детализация заказа",
         "parameters": [
           {
             "name": "user_id",
             "in": "path",
-            "description": "id студента",
+            "description": "id пользователя",
             "required": true,
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "file_id",
+            "name": "merchant_id",
             "in": "path",
-            "description": "id файла",
+            "description": "id мерчанта",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_id",
+            "in": "path",
+            "description": "id заказа",
             "required": true,
             "schema": {
               "type": "string"
@@ -1905,7 +880,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/fileResponse"
+                  "$ref": "#/components/schemas/getMerchantOrderDetalisationResponse"
                 }
               }
             }
@@ -1921,7 +896,7 @@
             }
           },
           "404": {
-            "description": "Not Found (Не найдено)",
+            "description": "NOT FOUND (Не найдено)",
             "content": {
               "application/json": {
                 "schema": {
@@ -1940,186 +915,38 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
+        }
       }
     },
-    "/application/{application_id}/suggestion/{suggestion_id}/lesson": {
-      "post": {
-        "tags": [
-          "Suggestion"
-        ],
-        "summary": "Создаёт урок из заявки",
-        "parameters": [
-          {
-            "name": "suggestion_id",
-            "in": "path",
-            "description": "id студента",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "application_id",
-            "in": "path",
-            "description": "id заявки",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "CREATED",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/lessonResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/application/{application_id}/suggestion/{suggestion_id}": {
-      "delete": {
-        "tags": [
-          "Suggestion"
-        ],
-        "summary": "Удаляет предложение",
-        "parameters": [
-          {
-            "name": "suggestion_id",
-            "in": "path",
-            "description": "id студента",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "application_id",
-            "in": "path",
-            "description": "id заявки",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "NO_CONTENT"
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/user/{user_id}/suggestion": {
+    "/user/{user_id}/merchant/{merchant_id}/order/{order_id}/document": {
       "get": {
         "tags": [
-          "Suggestion"
+          "Document"
         ],
-        "summary": "Возвращает все предложения для данного учителя",
+        "summary": "Посмотреть все документы по заказу",
         "parameters": [
           {
             "name": "user_id",
             "in": "path",
-            "description": "id учителя",
+            "description": "id пользователя",
             "required": true,
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "limit",
-            "in": "query",
-            "description": "Лимит количества строк в ответе",
+            "name": "merchant_id",
+            "in": "path",
+            "description": "id мерчанта",
             "required": true,
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "offset",
-            "in": "query",
-            "description": "Количество строк от начала выборки, которые были пропущены",
+            "name": "order_id",
+            "in": "path",
+            "description": "id заказа",
             "required": true,
             "schema": {
               "type": "string"
@@ -2132,7 +959,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/getSuggestionsResponse"
+                  "$ref": "#/components/schemas/getMerchantOrderDocumentsResponse"
                 }
               }
             }
@@ -2148,7 +975,7 @@
             }
           },
           "404": {
-            "description": "Not Found (Не найдено)",
+            "description": "NOT FOUND (Не найдено)",
             "content": {
               "application/json": {
                 "schema": {
@@ -2175,44 +1002,322 @@
         ]
       }
     },
-    "/group-lesson": {
-      "post": {
+    "/user/{user_id}/merchant/{merchant_id}/order/{order_id}/document:archive": {
+      "get": {
         "tags": [
-          "Group lesson"
+          "Document"
         ],
-        "summary": "Создаёт групповой урок",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/requestPostGroupLessonData"
+        "summary": "Скачать все документы одного закза архивом",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "id пользователя",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "id мерчанта",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_id",
+            "in": "path",
+            "description": "id заказа",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArchiveDownload"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Ошибка валидации) или пользователь уже существует",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
               }
             }
           }
         },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/user/{user_id}/merchant/{merchant_id}/order/{order_id}/document/{document_type}/{document_id}": {
+      "get": {
+        "tags": [
+          "Document"
+        ],
+        "summary": "Получение base 64 документа заказа",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "id пользователя",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "id мерчанта",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_id",
+            "in": "path",
+            "description": "id заказа",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "document_type",
+            "in": "path",
+            "description": "тип документа",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/OrderDocumentType"
+            }
+          },
+          {
+            "name": "document_id",
+            "in": "path",
+            "description": "id документа",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getMerchantOrderDocumentContentByTypeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Ошибка валидации)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT FOUND (Не найдено)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/user/{user_id}/merchant/{merchant_id}/order/{order_id}/document/{document_type}:archive": {
+      "get": {
+        "tags": [
+          "Document"
+        ],
+        "summary": "Скачать все документы одного типа одного закза архивом",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "id пользователя",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "id мерчанта",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_id",
+            "in": "path",
+            "description": "id заказа",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "document_type",
+            "in": "path",
+            "description": "тип документа",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/OrderDocumentType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArchiveDownload"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Ошибка валидации) или пользователь уже существует",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/user/{user_id}/merchant/{merchant_id}/order/{order_id}/document/{document_type}": {
+      "post": {
+        "tags": [
+          "Document"
+        ],
+        "summary": "Добаление документа",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "id пользователя",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "id мерчанта",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_id",
+            "in": "path",
+            "description": "id заказа",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "document_type",
+            "in": "path",
+            "description": "тип документа",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/OrderDocumentType"
+            }
+          }
+        ],
         "responses": {
           "201": {
             "description": "CREATED",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/groupLessonResponse"
+                  "$ref": "#/components/schemas/getMerchantOrderDocumentsResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
+            "description": "Bad Request (Ошибка валидации) или пользователь уже существует",
             "content": {
               "application/json": {
                 "schema": {
@@ -2239,20 +1344,70 @@
         ]
       }
     },
-    "/group-lesson/{group_lesson_id}": {
+    "/user/{user_id}/merchant/{merchant_id}/document": {
       "get": {
         "tags": [
-          "Group lesson"
+          "Document"
         ],
-        "summary": "Возвращает данные о групповом уроке",
+        "summary": "Получение документов всех заказов мерчу",
         "parameters": [
           {
-            "name": "group_lesson_id",
+            "name": "user_id",
             "in": "path",
-            "description": "id группового урока",
+            "description": "id пользователя",
             "required": true,
             "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "id мерча",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "types",
+            "in": "query",
+            "description": "массив типов",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/OrderDocumentType"
+              }
+            }
+          },
+          {
+            "name": "date_from",
+            "in": "query",
+            "description": "дата от",
+            "required": false,
+            "schema": {
+              "format": "date-time",
               "type": "string"
+            }
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "description": "дата до",
+            "required": false,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_id",
+            "in": "query",
+            "description": "фильр по id заказа",
+            "required": false,
+            "schema": {
+              "type": "integer"
             }
           }
         ],
@@ -2262,13 +1417,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/groupLessonResponse"
+                  "$ref": "#/components/schemas/getMerchantDocumentsResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad Request (Ошибка валидации)",
+            "description": "Bad Request (Ошибка валидации) или пользователь уже существует",
             "content": {
               "application/json": {
                 "schema": {
@@ -2277,8 +1432,198 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found (Не найдено)",
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/user/{user_id}/merchant/{merchant_id}/document:archive": {
+      "get": {
+        "tags": [
+          "Document"
+        ],
+        "summary": "Получение документов всех заказов мерчу архивом",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "id пользователя",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "id мерча",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "types",
+            "in": "query",
+            "description": "массив типов",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/OrderDocumentType"
+              }
+            }
+          },
+          {
+            "name": "date_from",
+            "in": "query",
+            "description": "дата от",
+            "required": false,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "description": "дата до",
+            "required": false,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_id",
+            "in": "query",
+            "description": "фильр по id заказа",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArchiveDownload"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Ошибка валидации) или пользователь уже существует",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/user/{user_id}/merchant/{merchant_id}/event": {
+      "get": {
+        "tags": [
+          "Event"
+        ],
+        "summary": "Получение всех эвентов пользователя",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "id пользователя",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "id мерча",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "date_from",
+            "in": "query",
+            "description": "дата от",
+            "required": false,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "description": "дата до",
+            "required": false,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "address",
+            "in": "query",
+            "description": "фильтр по адресу. Ожидается id адреса",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMerchantEventResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Ошибка валидации)",
             "content": {
               "application/json": {
                 "schema": {
@@ -2304,25 +1649,272 @@
           }
         ]
       },
-      "delete": {
+      "post": {
         "tags": [
-          "Group lesson"
+          "Event"
         ],
-        "summary": "Удаляет группой урок",
+        "summary": "Создание эвента пользователя",
         "parameters": [
           {
-            "name": "group_lesson_id",
+            "name": "user_id",
             "in": "path",
-            "description": "id группового урока",
+            "description": "id пользователя",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "id мерча",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CREATED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateEventResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Ошибка валидации)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/{user_id}/merchant/{merchant_id}/event/{event_id}": {
+      "delete": {
+        "tags": [
+          "Event"
+        ],
+        "summary": "Удаление эвента пользователя",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "id пользователя",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "id мерча",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "event_id",
+            "in": "path",
+            "description": "id эвента",
+            "required": true,
+            "schema": {
+              "type": "integer"
             }
           }
         ],
         "responses": {
           "204": {
-            "description": "NO_CONTENT"
+            "description": "NO CONTENT"
+          },
+          "400": {
+            "description": "Bad Request (Ошибка валидации)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/address": {
+      "get": {
+        "tags": [
+          "Suggestions"
+        ],
+        "summary": "Получить данные адреса",
+        "description": "Получить данные адреса",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Поисковый запрос",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/suggestionPartyBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/addressData"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Ошибка валидации)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/suggestions/party": {
+      "get": {
+        "tags": [
+          "Suggestions"
+        ],
+        "summary": "Справочный метод. По поисковой строке отдаёт список доступных компаний",
+        "operationId": "App\\Controller\\MerchantApiControllerInterface::suggestionsParty",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/suggestionPartyBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/suggestionsParty"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Ошибка валидации)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (Не найдено)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bik": {
+      "get": {
+        "tags": [
+          "Suggestions"
+        ],
+        "summary": "Отдаёт данные о банке по БИК",
+        "operationId": "App\\Controller\\MerchantApiControllerInterface::getBikInfo",
+        "parameters": [
+          {
+            "name": "bik",
+            "in": "query",
+            "description": "БИК банка",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getBanksResponse"
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad Request (Ошибка валидации)",
@@ -2362,46 +1954,68 @@
         ]
       }
     },
-    "/group-lesson/{group_lesson_id}/join": {
+    "/price": {
+      "get": {
+        "tags": [
+          "Suggestions"
+        ],
+        "summary": "Получение активного прайса.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PriceResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Ошибка валидации) или пользователь уже существует",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/feedback": {
       "post": {
         "tags": [
-          "Group lesson"
+          "Feedback"
         ],
-        "summary": "Добавляет студента в групповой урок",
-        "parameters": [
-          {
-            "name": "group_lesson_id",
-            "in": "path",
-            "description": "id группового урока",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "CREATED",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/groupLessonResponse"
-                }
+        "summary": "Запрос обратной связи",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFeedbackRequest"
               }
             }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "NO CONTENT"
           },
           "400": {
             "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
             "content": {
               "application/json": {
                 "schema": {
@@ -2420,876 +2034,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/language": {
-      "get": {
-        "tags": [
-          "Language"
-        ],
-        "summary": "Возвращает данные о всех языках любому студенту",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "Лимит количества строк в ответе",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "description": "Количество строк от начала выборки, которые были пропущены",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getLanguagesResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/language/{language_id}": {
-      "get": {
-        "tags": [
-          "Language"
-        ],
-        "summary": "Возвращает данные о языке любому студенту",
-        "parameters": [
-          {
-            "name": "language_id",
-            "in": "path",
-            "description": "id языка",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getLanguageResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/subject": {
-      "get": {
-        "tags": [
-          "Subject"
-        ],
-        "summary": "Возвращает данные о всех предметах обучения любому студенту",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "Лимит количества строк в ответе",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "description": "Количество строк от начала выборки, которые были пропущены",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getSubjectsResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/subject/{subject_id}": {
-      "get": {
-        "tags": [
-          "Subject"
-        ],
-        "summary": "Возвращает данные о предмете обучения любому студенту",
-        "parameters": [
-          {
-            "name": "subject_id",
-            "in": "path",
-            "description": "id предмета обучения",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getSubjectResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/grade": {
-      "get": {
-        "tags": [
-          "Grade"
-        ],
-        "summary": "Возвращает данные о всех возрастах обучения любому студенту",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "Лимит количества строк в ответе",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "description": "Количество строк от начала выборки, которые были пропущены",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getGradesResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/grade/{grade_id}": {
-      "get": {
-        "tags": [
-          "Grade"
-        ],
-        "summary": "Возвращает данные о возрасте обучения любому студенту",
-        "parameters": [
-          {
-            "name": "grade_id",
-            "in": "path",
-            "description": "id возраста обучения",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getGradeResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/level": {
-      "get": {
-        "tags": [
-          "Level"
-        ],
-        "summary": "Возвращает данные о всех уровнях обучения любому студенту",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "Лимит количества строк в ответе",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "description": "Количество строк от начала выборки, которые были пропущены",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getLevelsResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/level/{level_id}": {
-      "get": {
-        "tags": [
-          "Level"
-        ],
-        "summary": "Возвращает данные об уровне обучения любому студенту",
-        "parameters": [
-          {
-            "name": "level_id",
-            "in": "path",
-            "description": "id уровня обучения",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getLevelResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/level/{level_id}/education-system": {
-      "get": {
-        "tags": [
-          "EducationSystem"
-        ],
-        "summary": "Возвращает данные о всех системах обучения любому студенту",
-        "parameters": [
-          {
-            "name": "level_id",
-            "in": "path",
-            "description": "id уровня системы обучения",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "Лимит количества строк в ответе",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "description": "Количество строк от начала выборки, которые были пропущены",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getEducationSystemsResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/level/{level_id}/education-system/{education_system_id}": {
-      "get": {
-        "tags": [
-          "EducationSystem"
-        ],
-        "summary": "Возвращает данные о системе обучения любому студенту",
-        "parameters": [
-          {
-            "name": "level_id",
-            "in": "path",
-            "description": "id уровня системы обучения",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "education_system_id",
-            "in": "path",
-            "description": "id системы обучения",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getEducationSystemResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/notification": {
-      "get": {
-        "tags": [
-          "Notification"
-        ],
-        "summary": "Возвращает все оповещения данного юзера",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "Лимит количества строк в ответе",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "description": "Количество строк от начала выборки, которые были пропущены",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getNotificationsResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/notification/{notification_id}": {
-      "put": {
-        "tags": [
-          "Notification"
-        ],
-        "summary": "Меняет статус оповещения на прочитанное",
-        "parameters": [
-          {
-            "name": "notification_id",
-            "in": "path",
-            "description": "id оповещения",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/putNotificationResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
+        }
       }
     }
   },
@@ -3334,1242 +2079,250 @@
         },
         "type": "object"
       },
-      "tokenData": {
-        "type": "object",
-        "properties": {
-          "token": {
-            "type": "string",
-            "example": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAGUExURQAAAP///6XZn90AAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAKSURBVBjTY2AAAAACAAGYY2zXAAAAAElFTkSuQmCC"
-          },
-          "expiration_at": {
-            "type": "string",
-            "format": "date_time",
-            "example": "1985-04-12T23:20:50.52Z"
-          }
-        }
-      },
-      "tokenDataResponse": {
+      "getMerchantFullDataResponse": {
         "type": "object",
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/tokenData"
+            "$ref": "#/components/schemas/MerchantFullData"
           }
         }
       },
-      "userData": {
+      "requisitesData": {
         "type": "object",
         "properties": {
-          "id": {
-            "description": "Идентификатор юзера",
-            "type": "integer",
-            "example": 50
-          },
-          "type": {
-            "description": "Тип юзера",
+          "bik": {
+            "description": "БИК мерчанта",
             "type": "string",
-            "example": "teacher"
+            "example": "123456789"
           },
-          "last_name": {
-            "description": "Фамилия",
+          "rs": {
+            "description": "р/с мерчанта",
             "type": "string",
-            "example": "Иванов"
-          },
-          "first_name": {
-            "description": "Имя",
-            "type": "string",
-            "example": "Иван"
-          },
-          "birth_date": {
-            "description": "Дата рождения",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          },
-          "study_subjects": {
-            "description": "Предметы для изучения",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/subjectData"
-            }
-          },
-          "study_languages": {
-            "description": "Языки изучения",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/languageData"
-            }
-          },
-          "study_education_system": {
-            "$ref": "#/components/schemas/educationSystemData"
-          },
-          "study_grade": {
-            "$ref": "#/components/schemas/gradeData"
-          },
-          "instruction_subjects": {
-            "description": "Предметы для преподавания",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/subjectData"
-            }
-          },
-          "instruction_languages": {
-            "description": "Языки преподавания",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/languageData"
-            }
-          },
-          "instruction_education_systems": {
-            "$ref": "#/components/schemas/educationSystemData"
-          },
-          "instruction_grades": {
-            "$ref": "#/components/schemas/gradeData"
-          },
-          "online": {
-            "description": "Флаг онлайновости",
-            "type": "boolean",
-            "example": true
-          },
-          "rating": {
-            "description": "Рейтинг, считается на основе оценок",
-            "type": "integer",
-            "example": 4
-          }
-        }
-      },
-      "filesData": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Идентификатор файла",
-            "type": "integer",
-            "example": 50
-          },
-          "file_type": {
-            "description": "Тип файла",
-            "type": "string",
-            "example": "avatar"
-          }
-        }
-      },
-      "requestFileData": {
-        "type": "object",
-        "properties": {
-          "content": {
-            "description": "Файл в base64",
-            "type": "string",
-            "example": ""
-          },
-          "file_name": {
-            "description": "Имя файла",
-            "type": "string",
-            "example": "dz"
-          }
-        }
-      },
-      "responseFileData": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Идентификатор файла",
-            "type": "integer",
-            "example": 50
-          },
-          "content": {
-            "description": "Файл в base64",
-            "type": "string",
-            "example": ""
-          },
-          "file_name": {
-            "description": "Имя файла",
-            "type": "string",
-            "example": "dz"
-          }
-        }
-      },
-      "categoryData": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Идентификатор категории",
-            "type": "integer",
-            "example": 50
+            "example": "12345678901234567890"
           },
           "name": {
-            "description": "Название категории",
+            "description": "Название банка мерчанта",
             "type": "string",
-            "example": ""
+            "example": "ПАО Банк"
+          },
+          "ks": {
+            "description": "Кор. счёт мерчанта",
+            "type": "string",
+            "example": "12345678901234567890"
           }
         }
       },
-      "levelData": {
+      "updateMerchantRequest": {
         "type": "object",
         "properties": {
-          "id": {
-            "description": "Идентификатор уровня",
-            "type": "integer",
-            "example": 50
+          "adminstration": {
+            "$ref": "#/components/schemas/MerchantAdmistrationData"
           },
-          "name": {
-            "description": "Название ",
-            "type": "string",
-            "example": ""
-          }
-        }
-      },
-      "educationSystemData": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Идентификатор системы обучения",
-            "type": "integer",
-            "example": 50
-          },
-          "name": {
-            "description": "Название системы образования",
-            "type": "string",
-            "example": "AP"
-          },
-          "level": {
-            "$ref": "#/components/schemas/levelData"
-          },
-          "languages": {
-            "description": "Языки преподавания",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/languageData"
-            }
-          }
-        }
-      },
-      "gradeData": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Идентификатор системы обучения",
-            "type": "integer",
-            "example": 50
-          },
-          "name": {
-            "description": "Возраст ученика",
-            "type": "string",
-            "example": "6"
-          }
-        }
-      },
-      "subjectData": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Идентификатор предмета изучения/преподавания",
-            "type": "integer",
-            "example": 50
-          },
-          "name": {
-            "description": "Предмет для изучения/преподавания",
-            "type": "string",
-            "example": "mathematics"
-          },
-          "educationSystem": {
-            "$ref": "#/components/schemas/educationSystemData"
-          },
-          "category": {
-            "$ref": "#/components/schemas/categoryData"
-          }
-        }
-      },
-      "languageData": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Идентификатор языка изучения/преподавания",
-            "type": "integer",
-            "example": 50
-          },
-          "name": {
-            "description": "Язык изучения/преподавания",
-            "type": "string",
-            "example": "ENG"
-          }
-        }
-      },
-      "studentData": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Идентификатор студента",
-            "type": "integer",
-            "example": 50
-          },
-          "study_subjects": {
-            "description": "Предметы для изучения",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/subjectData"
-            }
-          },
-          "study_languages": {
-            "description": "Языки изучения",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/languageData"
-            }
-          },
-          "study_education_system": {
-            "$ref": "#/components/schemas/educationSystemData"
-          },
-          "study_grade": {
-            "$ref": "#/components/schemas/gradeData"
-          },
-          "files": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/responseFileData"
-            }
-          }
-        }
-      },
-      "teacherData": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Идентификатор учителя",
-            "type": "integer",
-            "example": 50
-          },
-          "study_subjects": {
-            "description": "Предметы для изучения",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/subjectData"
-            }
-          },
-          "study_languages": {
-            "description": "Языки изучения",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/languageData"
-            }
-          },
-          "study_education_system": {
-            "$ref": "#/components/schemas/educationSystemData"
-          },
-          "study_grade": {
-            "$ref": "#/components/schemas/gradeData"
-          },
-          "files": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/responseFileData"
-            }
-          },
-          "zoom_id": {
-            "description": "Идентификатор учителя в zoom",
-            "type": "integer",
-            "example": 50
-          },
-          "approve_date": {
-            "description": "Дата активации учителя",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          },
-          "last_active_date": {
-            "description": "Дата последней активности учителя",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          },
-          "online": {
-            "description": "Флаг онлайновости",
-            "type": "boolean",
-            "example": true
-          },
-          "rating": {
-            "description": "Рейтинг, формирующийся на основе оценок",
-            "type": "integer",
-            "example": 4
-          },
-          "teaching_subjects": {
-            "description": "Предметы для изучения",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/subjectData"
-            }
-          },
-          "teaching_languages": {
-            "description": "Языки изучения",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/languageData"
-            }
-          },
-          "teaching_education_systems": {
-            "$ref": "#/components/schemas/educationSystemData"
-          },
-          "teaching_grades": {
-            "$ref": "#/components/schemas/gradeData"
-          }
-        }
-      },
-      "slotData": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Идентификатор слота",
-            "type": "integer",
-            "example": 50
-          },
-          "event_id": {
-            "description": "Идентификатор ивента",
-            "type": "integer",
-            "example": 50
-          },
-          "date_from": {
-            "description": "Дата начала слота",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          },
-          "date_to": {
-            "description": "Дата окончания слота",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          },
-          "invites": {
-            "description": "Приглашения данного слота",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/inviteData"
-            }
-          }
-        }
-      },
-      "inviteData": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Идентификатор приглашения",
-            "type": "integer",
-            "example": 50
-          },
-          "status": {
-            "description": "Статус приглашения",
-            "type": "string",
-            "example": "approved",
-            "enum": [
-              "new",
-              "approved",
-              "rejected"
-            ]
-          },
-          "student": {
-            "$ref": "#/components/schemas/studentData"
-          },
-          "teacher": {
-            "$ref": "#/components/schemas/teacherData"
-          },
-          "date_from": {
-            "description": "Предполагаемое время начала урока",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          },
-          "date_to": {
-            "description": "Предполагаемое время окончания урока",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          },
-          "initiator": {
-            "description": "Инициатор приглашения",
-            "type": "string",
-            "example": "teacher",
-            "enum": [
-              "teacher",
-              "student"
-            ]
-          },
-          "subject": {
-            "$ref": "#/components/schemas/subjectData"
-          },
-          "topic": {
-            "description": "Тема урока",
-            "type": "string",
-            "example": "Equations"
-          },
-          "rejectDate": {
-            "description": "Дата отмены приглашения (только для статусов: rejected)",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          }
-        }
-      },
-      "lessonData": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Идентификатор урока",
-            "type": "integer",
-            "example": 50
-          },
-          "status": {
-            "description": "Статус урока",
-            "type": "string",
-            "example": "approved",
-            "enum": [
-              "new",
-              "new_group",
-              "finished",
-              "finished_group",
-              "rejected",
-              "rejected_group"
-            ]
-          },
-          "student": {
-            "$ref": "#/components/schemas/studentData"
-          },
-          "teacher": {
-            "$ref": "#/components/schemas/teacherData"
-          },
-          "date_from": {
-            "description": "Дата начала урока",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          },
-          "date_to": {
-            "description": "Дата окончания урока",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          },
-          "votes": {
-            "description": "Оценки урока (только для статусов: finished, finished_group)",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/voteData"
-            }
-          },
-          "rejectDate": {
-            "description": "Дата отмены урока (только для статусов: rejected, rejected_group)",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          }
-        }
-      },
-      "voteData": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Идентификатор оценки",
-            "type": "integer",
-            "example": 50
-          },
-          "rating": {
-            "description": "Оценка урока",
-            "type": "integer",
-            "example": 5,
-            "enum": [
-              0,
-              1,
-              2,
-              3,
-              4,
-              5
-            ]
-          },
-          "target": {
-            "description": "Тот, кому ставят оценку",
-            "type": "string",
-            "example": "teacher"
-          }
-        }
-      },
-      "userId": {
-        "description": "Идентификатор юзера",
-        "type": "integer",
-        "example": 50
-      },
-      "applicationData": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Идентификатор заявки",
-            "type": "integer",
-            "example": 50
-          },
-          "status": {
-            "description": "Статус заявки",
-            "type": "string",
-            "example": "new",
-            "enum": [
-              "new",
-              "approved",
-              "rejected"
-            ]
-          },
-          "student": {
-            "$ref": "#/components/schemas/studentData"
-          },
-          "subject": {
-            "$ref": "#/components/schemas/subjectData"
-          },
-          "duration": {
-            "description": "Длительность занятия",
-            "type": "string",
-            "example": "15 minutes",
-            "enum": [
-              "15 minutes",
-              "30 minutes",
-              "45 minutes"
-            ]
-          },
-          "topic": {
-            "description": "Тема занятия",
-            "type": "string",
-            "example": "Тема занятия"
-          },
-          "files": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/requestFileData"
-            }
-          },
-          "rejectDate": {
-            "description": "Дата отмены заявки (только для статусов: rejected)",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          }
-        }
-      },
-      "suggestionData": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Идентификатор предложения",
-            "type": "integer",
-            "example": 50
-          },
-          "status": {
-            "description": "Статус предложения",
-            "type": "string",
-            "example": "new",
-            "enum": [
-              "new",
-              "approved",
-              "rejected"
-            ]
-          },
-          "application": {
-            "$ref": "#/components/schemas/applicationData"
-          },
-          "lesson": {
-            "description": "Урок, созданный на основе предложения (только для статусов: approved)",
-            "$ref": "#/components/schemas/lessonData"
-          },
-          "createdAt": {
-            "description": "Дата создания предложения",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          },
-          "rejectDate": {
-            "description": "Дата отмены предложения (только для статусов: rejected)",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          }
-        }
-      },
-      "groupLessonData": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Идентификатор группового урока",
-            "type": "integer",
-            "example": 50
-          },
-          "status": {
-            "description": "Статус группового урока",
-            "type": "string",
-            "example": "approved",
-            "enum": [
-              "new_group",
-              "finished_group",
-              "rejected_group"
-            ]
-          },
-          "students": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/studentData"
-            }
-          },
-          "teacher": {
-            "$ref": "#/components/schemas/teacherData"
-          },
-          "date_from": {
-            "description": "Дата начала урока",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          },
-          "date_to": {
-            "description": "Дата окончания урока",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          },
-          "votes": {
-            "description": "Оценки урока (только для статусов: finished, finished_group)",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/voteData"
-            }
-          },
-          "rejectDate": {
-            "description": "Дата отмены урока (только для статусов: rejected, rejected_group)",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          }
-        }
-      },
-      "notificationData": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Идентификатор оповещения",
-            "type": "integer",
-            "example": 50
-          },
-          "status": {
-            "description": "Статус оповещения",
-            "type": "string",
-            "example": "new",
-            "enum": [
-              "new",
-              "read"
-            ]
-          },
-          "user": {
-            "$ref": "#/components/schemas/userData"
-          },
-          "entity_id": {
-            "description": "Идентификатор сущности, привязанной к оповещению",
-            "type": "integer",
-            "example": 50
-          },
-          "entity_type": {
-            "description": "Тип сущности, привязанной к оповещению",
-            "type": "string",
-            "example": "invite",
-            "enum": [
-              "invite",
-              "message",
-              "lesson",
-              "group_lesson",
-              "inactive_teacher"
-            ]
-          },
-          "related_entity_id": {
-            "description": "Идентификатор сущности, связанной с сущностью, привязанной к оповещению",
-            "type": "integer",
-            "example": 50
-          },
-          "related_entity_type": {
-            "description": "Тип сущности, связанной с сущностью, привязанной к оповещению",
-            "type": "string",
-            "example": "student",
-            "enum": [
-              "student",
-              "teacher"
-            ]
-          },
-          "notification_type": {
-            "description": "Тип оповещения",
-            "type": "string",
-            "example": "new",
-            "enum": [
-              "create",
-              "approve",
-              "reject",
-              "reject_participation",
-              "reject_lesson",
-              "join",
-              "role_teacher_to_admin",
-              "role_admin_to_teacher",
-              "role_inactive_to_teacher",
-              "role_inactive_to_student",
-              "role_student_to_inactive"
-            ]
-          }
-        }
-      },
-      "postEventRequest": {
-        "type": "object",
-        "properties": {
-          "date_from": {
-            "description": "Дата начала Event-а",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          },
-          "date_to": {
-            "description": "Дата конца Event-а",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          },
-          "periodicity": {
-            "description": "Периодичность занятий Event-а",
-            "type": "string",
-            "example": "once",
-            "enum": [
-              "once",
-              "every_day",
-              "every_week",
-              "every_month"
-            ]
-          }
-        }
-      },
-      "postEventResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
+          "common_data": {
             "type": "object",
             "properties": {
-              "id": {
-                "description": "Идентификатор Event-а",
-                "type": "integer",
-                "example": 50
+              "inn": {
+                "type": "string",
+                "example": 3664069337
               },
-              "slots": {
-                "description": "Набор Slot-ов данного Event-а",
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/slotData"
-                }
+              "ogrn": {
+                "type": "string",
+                "example": 1053600591197
               }
             }
-          }
-        }
-      },
-      "patchUserRequest": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "description": "Статус юзера",
-            "type": "string",
-            "example": "active"
-          }
-        }
-      },
-      "postUsersFileRequest": {
-        "type": "object",
-        "properties": {
-          "file": {
-            "description": "Файл в base64",
-            "type": "string",
-            "example": ""
           },
-          "type": {
-            "description": "Тип файла",
-            "type": "string",
-            "example": "avatar"
+          "requisites_data": {
+            "$ref": "#/components/schemas/requisitesData"
           }
         }
       },
-      "getUserResponse": {
-        "type": "object",
+      "suggestionPartyBody": {
+        "properties": {
+          "search": {
+            "description": "Строка для поиска информации в DaData",
+            "type": "string",
+            "example": "1234567890"
+          }
+        },
+        "type": "object"
+      },
+      "addressData": {
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/userData"
+            "$ref": "#/components/schemas/addressSuggestions"
           }
-        }
+        },
+        "type": "object"
       },
-      "putUserRequest": {
-        "type": "object",
+      "addressSuggestions": {
         "properties": {
-          "type": {
-            "description": "Тип юзера",
-            "type": "string",
-            "example": "teacher"
-          },
-          "last_name": {
-            "description": "Фамилия",
-            "type": "string",
-            "example": "Иванов"
-          },
-          "first_name": {
-            "description": "Имя",
-            "type": "string",
-            "example": "Иван"
-          },
-          "birth_date": {
-            "description": "Дата рождения",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          },
-          "study_subjects": {
-            "description": "Предметы для изучения",
+          "address": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/subjectData"
-            }
-          },
-          "study_languages": {
-            "description": "Языки изучения",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/languageData"
-            }
-          },
-          "study_education_system": {
-            "description": "Система образования для изучения",
-            "type": "string",
-            "example": "IB"
-          },
-          "study_grade": {
-            "description": "Возраст ученика, класс",
-            "type": "string",
-            "example": "6"
-          },
-          "instruction_subjects": {
-            "description": "Предметы для преподавания",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/subjectData"
-            }
-          },
-          "instruction_languages": {
-            "description": "Языки преподавания",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/languageData"
-            }
-          },
-          "instruction_education_systems": {
-            "description": "Преподаваемые системы образования",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/educationSystemData"
-            }
-          },
-          "instruction_grades": {
-            "description": "Возможный возраст учеников",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/gradeData"
+              "$ref": "#/components/schemas/address"
             }
           }
-        }
+        },
+        "type": "object"
       },
-      "getUsersByFilterResponse": {
-        "type": "object",
+      "address": {
         "properties": {
-          "count": {
-            "description": "Количество записей в массиве данных",
-            "type": "integer",
-            "example": 25
+          "value": {
+            "type": "string",
+            "example": "г Воронеж, Рабочий пр-кт"
+          },
+          "unrestricted_value": {
+            "type": "string",
+            "example": "Воронежская обл, г Воронеж, Рабочий пр-кт"
           },
           "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/userData"
-            }
+            "$ref": "#/components/schemas/addressResponse"
           }
-        }
+        },
+        "type": "object"
       },
-      "getSlotsResponse": {
-        "type": "object",
+      "addressResponse": {
         "properties": {
-          "count": {
-            "description": "Количество записей в массиве данных",
-            "type": "integer",
-            "example": 25
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/slotData"
-            }
-          }
-        }
-      },
-      "getNotebookResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "object",
-            "properties": {
-              "students": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/studentData"
-                }
-              },
-              "teachers": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/teacherData"
-                }
-              }
-            }
-          }
-        }
-      },
-      "postInviteRequest": {
-        "type": "object",
-        "properties": {
-          "student_id": {
-            "description": "Идентификатор студента",
-            "type": "integer",
-            "example": 50
-          },
-          "date_from": {
-            "description": "Предполагаемое время начала урока",
+          "postal_code": {
             "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
+            "example": "394040"
           },
-          "date_to": {
-            "description": "Предполагаемое время окончания урока",
+          "region_fias_id": {
             "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
+            "example": "b756fe6b-bbd3-44d5-9302-5bfcc740f46e"
           },
-          "subject_id": {
-            "description": "Идентификатор предмета",
-            "type": "integer",
-            "example": 50
-          },
-          "topic": {
-            "description": "Тема урока",
+          "region": {
             "type": "string",
-            "example": "Equations"
+            "example": "Воронежская"
+          },
+          "city_fias_id": {
+            "type": "string",
+            "example": "5bf5ddff-6353-4a3d-80c4-6fb27f00c6c1"
+          },
+          "city": {
+            "type": "string",
+            "example": "Воронеж"
+          },
+          "settlement_fias_id": {
+            "type": "string",
+            "example": "string"
+          },
+          "settlement": {
+            "type": "string",
+            "example": "string"
+          },
+          "street_fias_id": {
+            "type": "string",
+            "example": "225af9a1-c016-42d7-b2bc-efbe5b8bbc78"
+          },
+          "street": {
+            "type": "string",
+            "example": "Рабочий"
+          },
+          "house_fias_id": {
+            "type": "string",
+            "example": "string"
+          },
+          "house": {
+            "type": "string",
+            "example": "string"
+          },
+          "block_type": {
+            "type": "string",
+            "example": "string"
+          },
+          "block_type_full": {
+            "type": "string",
+            "example": "string"
+          },
+          "block": {
+            "type": "string",
+            "example": "string"
+          },
+          "flat_type": {
+            "type": "string",
+            "example": "string"
+          },
+          "flat_type_full": {
+            "type": "string",
+            "example": "string"
+          },
+          "flat": {
+            "type": "string",
+            "example": "string"
+          },
+          "flat_area": {
+            "type": "string",
+            "example": "string"
+          },
+          "building": {
+            "description": "строение",
+            "example": 456456
           }
-        }
+        },
+        "type": "object"
       },
-      "postInviteResponse": {
-        "type": "object",
+      "getBanksResponse": {
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/inviteData"
+            "$ref": "#/components/schemas/getBankData"
           }
-        }
+        },
+        "type": "object"
       },
-      "getInviteResponse": {
-        "type": "object",
+      "getBankData": {
         "properties": {
-          "count": {
-            "description": "Количество записей в массиве данных",
-            "type": "integer",
-            "example": 25
+          "corresponding_account": {
+            "description": "Кор счёт",
+            "type": "string",
+            "example": "30101810400000000555"
           },
+          "bik": {
+            "description": "Бик банка",
+            "type": "string",
+            "example": "044525225"
+          },
+          "name": {
+            "description": "Название банка",
+            "type": "string",
+            "example": "ПАО Название"
+          }
+        },
+        "type": "object"
+      },
+      "suggestionsParty": {
+        "properties": {
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/inviteData"
+              "$ref": "#/components/schemas/suggestions"
             }
           }
-        }
+        },
+        "type": "object"
       },
-      "postFileResponse": {
-        "type": "object",
+      "suggestions": {
         "properties": {
-          "data": {
-            "$ref": "#/components/schemas/filesData"
-          }
-        }
-      },
-      "putLessonRequest": {
-        "type": "object",
-        "properties": {
-          "date_from": {
-            "description": "Дата начала урока",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          },
-          "date_to": {
-            "description": "Дата окончания урока",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          }
-        }
-      },
-      "lessonResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/lessonData"
-          }
-        }
-      },
-      "getLessonsByFilterResponse": {
-        "type": "object",
-        "properties": {
-          "count": {
-            "description": "Количество записей в массиве данных",
-            "type": "integer",
-            "example": 25
-          },
-          "data": {
+          "suggestions": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/lessonData"
+              "$ref": "#/components/schemas/suggestion"
             }
           }
-        }
+        },
+        "type": "object"
       },
-      "postVoteRequest": {
-        "type": "object",
+      "suggestion": {
         "properties": {
-          "rating": {
-            "description": "Оценка урока",
-            "type": "integer",
-            "example": 5
-          },
-          "target": {
-            "description": "Тот, кому ставят оценку",
+          "value": {
+            "description": "Наименование компании одной строкой",
             "type": "string",
-            "example": "teacher"
-          }
-        }
-      },
-      "postVoteResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/voteData"
-          }
-        }
-      },
-      "postChatRequest": {
-        "type": "object",
-        "properties": {
-          "users": {
-            "description": "Список юзеров в чате",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/userId"
-            }
+            "example": "ПАО СБЕРБАНК"
           },
-          "admin_chat": {
-            "description": "Признак админского чата",
-            "type": "boolean",
-            "example": false
-          }
-        }
-      },
-      "postChatResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Идентификатор чата",
-                "type": "integer",
-                "example": 50
-              },
-              "users": {
-                "description": "Список юзеров в чате",
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/userId"
-                }
-              },
-              "admin_chat": {
-                "description": "Признак админского чата",
-                "type": "boolean",
-                "example": false
-              }
-            }
-          }
-        }
-      },
-      "postApplicationRequest": {
-        "type": "object",
-        "properties": {
-          "subject_id": {
-            "description": "Идентификатор предмета",
-            "type": "integer",
-            "example": 50
-          },
-          "language_id": {
-            "description": "Идентификатор языка",
-            "type": "integer",
-            "example": 50
-          },
-          "education_system_id": {
-            "description": "Идентификатор системы образования",
-            "type": "integer",
-            "example": 50
-          },
-          "grade_id": {
-            "description": "Идентификатор возрастной группы",
-            "type": "integer",
-            "example": 50
-          },
-          "duration": {
-            "description": "Длительность занятия",
+          "unrestricted_value": {
+            "description": "Наименование компании одной строкой (полное)",
             "type": "string",
-            "example": "15 minutes",
-            "enum": [
-              "15 minutes",
-              "30 minutes",
-              "45 minutes"
-            ]
-          },
-          "topic": {
-            "description": "Тема занятия",
-            "type": "string",
-            "example": "Тема занятия"
-          }
-        }
-      },
-      "applicationResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/applicationData"
-          }
-        }
-      },
-      "fileResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/responseFileData"
-          }
-        }
-      },
-      "requestPostGroupLessonData": {
-        "type": "object",
-        "properties": {
-          "date_from": {
-            "description": "Дата начала урока",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          },
-          "date_to": {
-            "description": "Дата окончания урока",
-            "type": "string",
-            "example": "2018-09-05T16:14:44+03:00"
-          },
-          "subject_id": {
-            "description": "Идентификатор предмета обучения",
-            "type": "integer",
-            "example": 50
-          },
-          "topic": {
-            "description": "Тема урока",
-            "type": "string",
-            "example": "Тригонометрические уравнения"
-          }
-        }
-      },
-      "groupLessonResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/groupLessonData"
-          }
-        }
-      },
-      "getSuggestionsResponse": {
-        "type": "object",
-        "properties": {
-          "count": {
-            "description": "Количество записей в массиве данных",
-            "type": "integer",
-            "example": 25
+            "example": "ПАО СБЕРБАНК"
           },
           "data": {
             "type": "array",
@@ -4577,149 +2330,983 @@
               "$ref": "#/components/schemas/suggestionData"
             }
           }
-        }
+        },
+        "type": "object"
       },
-      "getLanguageResponse": {
-        "type": "object",
+      "suggestionData": {
         "properties": {
-          "data": {
-            "$ref": "#/components/schemas/languageData"
-          }
-        }
-      },
-      "getLanguagesResponse": {
-        "type": "object",
-        "properties": {
-          "count": {
-            "description": "Количество записей в массиве данных",
+          "kpp": {
+            "description": "КПП",
+            "type": "string",
+            "example": "773601001"
+          },
+          "capital": {
+            "description": "Поле доступно только при запросе findById/party",
+            "type": "string",
+            "example": null
+          },
+          "management": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/suggestionDataManagement"
+            }
+          },
+          "founders": {
+            "description": "Поле доступно только при запросе findById/party",
+            "type": "string",
+            "example": null
+          },
+          "managers": {
+            "description": "Поле доступно только при запросе findById/party",
+            "type": "string",
+            "example": null
+          },
+          "branch_type": {
+            "description": "Тип подразделения: филиал или головная орг-ция",
+            "type": "string",
+            "example": "MAIN"
+          },
+          "branch_count": {
+            "description": "Количество филиалов",
             "type": "integer",
-            "example": 25
+            "example": 88
+          },
+          "source": {
+            "description": "Поле доступно только при запросе findById/party",
+            "type": "string",
+            "example": null
+          },
+          "qc": {
+            "description": "Поле доступно только при запросе findById/party",
+            "type": "string",
+            "example": null
+          },
+          "hid": {
+            "description": "Уникальный идентификатор в Дадате",
+            "type": "string",
+            "example": "145a83ab38c9ad95889a7b894ce57a97cf6f6d5f42932a71331ff18606edecc6"
+          },
+          "type": {
+            "description": "Тип организации: юр. лицо или ИП",
+            "type": "string",
+            "example": "LEGAL"
+          },
+          "state": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/suggestionDataState"
+            }
+          },
+          "opf": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/suggestionDataOpf"
+            }
+          },
+          "name": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/suggestionDataName"
+            }
+          },
+          "inn": {
+            "description": "ИНН",
+            "type": "string",
+            "example": "7707083893"
+          },
+          "ogrn": {
+            "description": "ОГРН",
+            "type": "string",
+            "example": "1027700132195"
+          },
+          "okpo": {
+            "description": "Поле доступно только при запросе findById/party",
+            "type": "string",
+            "example": null
+          },
+          "okved": {
+            "description": "Код ОКВЭД",
+            "type": "string",
+            "example": "64.19"
+          },
+          "okveds": {
+            "description": "Поле доступно только при запросе findById/party",
+            "type": "string",
+            "example": null
+          },
+          "authorities": {
+            "description": "Поле доступно только при запросе findById/party",
+            "type": "string",
+            "example": null
+          },
+          "documents": {
+            "description": "Поле доступно только при запросе findById/party",
+            "type": "string",
+            "example": null
+          },
+          "licenses": {
+            "description": "Поле доступно только при запросе findById/party",
+            "type": "string",
+            "example": null
+          },
+          "finance": {
+            "description": "Поле доступно только при запросе findById/party",
+            "type": "string",
+            "example": null
+          },
+          "address": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/suggestionDataAddress"
+            }
+          },
+          "phones": {
+            "description": "Поле доступно только при запросе findById/party",
+            "type": "string",
+            "example": null
+          },
+          "emails": {
+            "description": "Поле доступно только при запросе findById/party",
+            "type": "string",
+            "example": null
+          },
+          "ogrn_date": {
+            "description": "Дата выдачи ОГРН",
+            "type": "integer",
+            "example": "1029456000000"
+          },
+          "okved_type": {
+            "description": "Версия справочника ОКВЭД (2001 или 2014)",
+            "type": "string",
+            "example": "2014"
+          },
+          "employee_count": {
+            "description": "Поле доступно только при запросе findById/party",
+            "type": "string",
+            "example": null
+          }
+        },
+        "type": "object"
+      },
+      "suggestionDataManagement": {
+        "properties": {
+          "name": {
+            "description": "ФИО руководителя",
+            "type": "string",
+            "example": "Греф Герман Оскарович"
+          },
+          "post": {
+            "description": "должность руководителя",
+            "type": "string",
+            "example": "ПРЕЗИДЕНТ, ПРЕДСЕДАТЕЛЬ ПРАВЛЕНИЯ"
+          },
+          "disqualified": {
+            "description": "Поле доступно только при запросе findById/party",
+            "type": "string",
+            "example": null
+          }
+        },
+        "type": "object"
+      },
+      "suggestionDataState": {
+        "properties": {
+          "status": {
+            "description": "статус организации ",
+            "type": "string",
+            "example": "ACTIVE"
+          },
+          "actuality_date": {
+            "description": "дата актуальности сведений",
+            "type": "integer",
+            "example": 1564012800000
+          },
+          "registration_date": {
+            "description": "дата регистрации",
+            "type": "integer",
+            "example": 677376000000
+          },
+          "liquidation_date": {
+            "description": "дата ликвидации",
+            "type": "string",
+            "example": null
+          }
+        },
+        "type": "object"
+      },
+      "suggestionDataOpf": {
+        "properties": {
+          "type": {
+            "description": "версия справочника ОКОПФ (99, 2012 или 2014)",
+            "type": "string",
+            "example": "2014"
+          },
+          "code": {
+            "description": "код ОКОПФ",
+            "type": "string",
+            "example": "12247"
+          },
+          "full": {
+            "description": "полное название ОПФ",
+            "type": "string",
+            "example": "Публичное акционерное общество"
+          },
+          "short": {
+            "description": "краткое название ОПФ",
+            "type": "string",
+            "example": "ПАО"
+          }
+        },
+        "type": "object"
+      },
+      "suggestionDataName": {
+        "properties": {
+          "full_with_opf": {
+            "description": "полное наименование с ОПФ",
+            "type": "string",
+            "example": "ПУБЛИЧНОЕ АКЦИОНЕРНОЕ ОБЩЕСТВО СБЕРБАНК РОССИИ"
+          },
+          "short_with_opf": {
+            "description": "краткое наименование с ОПФ",
+            "type": "string",
+            "example": "ПАО СБЕРБАНК"
+          },
+          "latin": {
+            "description": "наименование на латинице (не заполняется)",
+            "type": "string",
+            "example": null
+          },
+          "full": {
+            "description": "полное наименование",
+            "type": "string",
+            "example": "СБЕРБАНК РОССИИ"
+          },
+          "short": {
+            "description": "краткое наименование",
+            "type": "string",
+            "example": "СБЕРБАНК"
+          }
+        },
+        "type": "object"
+      },
+      "suggestionDataAddress": {
+        "properties": {
+          "value": {
+            "description": "наименование компании одной строкой (для ИП - город проживания)",
+            "type": "string",
+            "example": "г Москва, ул Вавилова, д 19"
+          },
+          "unrestricted_value": {
+            "description": "адрес одной строкой (полный, с индексом) стандартизован, поэтому может отличаться от записанного в ЕГРЮЛ",
+            "type": "string",
+            "example": "117312, г Москва, Академический р-н, ул Вавилова, д 19"
           },
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/languageData"
+              "$ref": "#/components/schemas/suggestionDataAddressData"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "suggestionDataAddressData": {
+        "properties": {
+          "value": {
+            "description": "гранулярный адресй",
+            "type": "string",
+            "example": "..."
+          }
+        },
+        "type": "object"
+      },
+      "PriceResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "rush_coefficient": {
+                "type": "number",
+                "description": "коэффициент умножения при нажатиии срочного заказа",
+                "example": 1.5
+              },
+              "price": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PriceDetalisation"
+                }
+              }
             }
           }
         }
       },
-      "getSubjectResponse": {
+      "PriceDetalisation": {
         "type": "object",
         "properties": {
-          "data": {
-            "$ref": "#/components/schemas/subjectData"
+          "id": {
+            "description": "идентификатор категории",
+            "type": "integer",
+            "example": 45
+          },
+          "category_name": {
+            "description": "Название категории для отображения",
+            "type": "string",
+            "example": "Сукно"
+          },
+          "category_api_name": {
+            "description": "Название категории для обработки в апи",
+            "type": "string",
+            "example": "c265195d-df69-4ec2-bc12-2a5cf44c200b"
+          },
+          "crm_id": {
+            "type": "integer",
+            "description": "Идентификатор CRM",
+            "example": 1061621
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductsDetalisation"
+            }
           }
         }
       },
-      "getSubjectsResponse": {
+      "ProductsDetalisation": {
         "type": "object",
         "properties": {
-          "count": {
-            "description": "Количество записей в массиве данных",
-            "type": "integer",
-            "example": 25
+          "id": {
+            "description": "идентификатор товара",
+            "example": 39
           },
+          "product_name": {
+            "description": "Название продукта для отображения в ленде",
+            "type": "string",
+            "example": "сукно настольное"
+          },
+          "product_api_name": {
+            "description": "Название продукта для использования в апи",
+            "type": "string",
+            "example": "c265195d-df69-4ec2-bc12-2a5cf44c200b"
+          },
+          "crm_id": {
+            "type": "integer",
+            "description": "Идентификатор CRM",
+            "example": 1061621
+          },
+          "unit": {
+            "$ref": "#/components/schemas/UnitsTypes"
+          },
+          "price": {
+            "description": "Цена за одну еденицу измерения",
+            "type": "number",
+            "example": 36.2
+          }
+        }
+      },
+      "UnitsTypes": {
+        "description": "Единица измерения",
+        "type": "string",
+        "example": "kilogram",
+        "enum": [
+          "kilogram (килограмм)",
+          "square_meter (квадратный метр)",
+          "piece (штука)",
+          "pairs (пара)"
+        ]
+      },
+      "CreateMerchantRequest": {
+        "type": "object",
+        "required": [
+          "inn",
+          "ogrn"
+        ],
+        "properties": {
+          "inn": {
+            "description": "ИНН",
+            "type": "string",
+            "example": "7707083893"
+          },
+          "ogrn": {
+            "description": "ОГРН",
+            "type": "string",
+            "example": "1027700132195"
+          }
+        }
+      },
+      "MerchantFullDataResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/MerchantFullData"
+          }
+        }
+      },
+      "MerchantAdmistrationData": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Фио ответственного лица",
+            "example": "Констатинопольский Констатин Констатинович"
+          },
+          "position": {
+            "type": "string",
+            "description": "Должность",
+            "example": "Генеральный директор"
+          },
+          "document": {
+            "description": "Действует на основании",
+            "type": "string",
+            "enum": [
+              "articles_of_association (Устав)",
+              "power_of_attorney (Доверенность)",
+              "trust_management_agreement (Договор доверительного управления)"
+            ],
+            "example": "articles_of_association"
+          }
+        }
+      },
+      "GetMerchantResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/MerchantFullData"
+            }
+          }
+        }
+      },
+      "MerchantFullData": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 45
+          },
+          "common_data": {
+            "type": "object",
+            "properties": {
+              "legal_name": {
+                "type": "string",
+                "description": "Офицальное название мерча",
+                "example": "ИП Констатинопольский К.К."
+              },
+              "inn": {
+                "type": "string",
+                "example": 3664069337
+              },
+              "ogrn": {
+                "type": "string",
+                "example": 1053600591197
+              }
+            }
+          },
+          "adminstration": {
+            "$ref": "#/components/schemas/MerchantAdmistrationData"
+          }
+        }
+      },
+      "CreateFeedbackRequest": {
+        "type": "object",
+        "required": [
+          "phone",
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "description": "Тип обращения",
+            "type": "string",
+            "example": "technical_support",
+            "enum": [
+              "technical_support (техническая поддержка)",
+              "wish (Пожелание / Замечание)",
+              "delivery (доставка вещей)"
+            ]
+          },
+          "phone": {
+            "description": "номер телефона пользователя",
+            "type": "string",
+            "pattern": "/^\\d{11}$/",
+            "example": "79000000000"
+          },
+          "email": {
+            "description": "Почта пользователя",
+            "type": "string",
+            "example": "rererereerere@gmail.com"
+          },
+          "message": {
+            "description": "Сообщение пользователя",
+            "type": "string",
+            "example": "Тут месэдж от пользователя"
+          },
+          "full_name": {
+            "description": "Полное имя пользователя",
+            "type": "string",
+            "example": "Констатинопольский Константин Константинович"
+          },
+          "inn": {
+            "description": "ИНН",
+            "type": "string",
+            "example": "7707083893"
+          },
+          "ogrn": {
+            "description": "ОГРН",
+            "type": "string",
+            "example": "1027700132195"
+          }
+        }
+      },
+      "getMerchantAddressesDataResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "items_count": {
+                "type": "integer",
+                "example": 45
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AddressData"
+                }
+              }
+            }
+          }
+        }
+      },
+      "getMerchantAddressDataResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/AddressData"
+          }
+        }
+      },
+      "AddressData": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Идентификатор адреса",
+            "type": "integer",
+            "example": 45
+          },
+          "type": {
+            "$ref": "#/components/schemas/AddressType"
+          },
+          "full_address": {
+            "description": "полный адрес",
+            "type": "string",
+            "example": "Воронеж, у ленина д 1"
+          },
+          "fias_id": {
+            "type": "string",
+            "example": "225af9a1-c016-42d7-b2bc-efbe5b8bbc78"
+          }
+        }
+      },
+      "CreateAddressRequest": {
+        "type": "object",
+        "required": [
+          "type",
+          "fias_id"
+        ],
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/AddressType"
+          },
+          "address": {
+            "description": "Адрес строкой",
+            "type": "string",
+            "example": "Воронеж, у ленина д 1"
+          },
+          "fias_id": {
+            "type": "string",
+            "example": "225af9a1-c016-42d7-b2bc-efbe5b8bbc78"
+          }
+        }
+      },
+      "AddressType": {
+        "description": "Тип адреса",
+        "type": "string",
+        "example": "delivery",
+        "enum": [
+          "delivery (адрес доставки)",
+          "legal (юр адрес)",
+          null
+        ]
+      },
+      "getMerchantOrdersResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "items_count": {
+                "type": "integer",
+                "example": 45
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/MerchantOrder"
+                }
+              }
+            }
+          }
+        }
+      },
+      "MerchantOrder": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 45
+          },
+          "event_id": {
+            "type": "integer",
+            "example": 37
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "new (новый)",
+              "in_processing (в обработке)",
+              "transferred_to_production (передан в производство)",
+              "handed_over_to_courier (передан курьеру)",
+              "completed (завершен)",
+              "awaiting_courier_appointment (ожидает назначения курьера)",
+              "canceled (отменен)",
+              "handed_over_to_receiver (передан приемщику)",
+              "problem (проблемный)"
+            ],
+            "example": "in_processing"
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "product_name": {
+                  "type": "string",
+                  "example": "Белье постельное фасонное, сложное (вышивка, рюши)"
+                },
+                "execution_time": {
+                  "type": "string",
+                  "example": "48 часов"
+                },
+                "product_api_name": {
+                  "description": "Название продукта для обработки в апи",
+                  "type": "string",
+                  "example": "c265195d-df69-4ec2-bc12-2a5cf44c200b"
+                },
+                "category_name": {
+                  "type": "string",
+                  "example": "вышивка, рюши"
+                },
+                "category_api_name": {
+                  "description": "Название категории для обработки в апи",
+                  "type": "string",
+                  "example": "c265195d-df69-4ec2-bc12-2a5cf44c200b"
+                },
+                "unit": {
+                  "$ref": "#/components/schemas/UnitsTypes"
+                },
+                "count": {
+                  "type": "number",
+                  "example": 30
+                },
+                "amount": {
+                  "type": "number",
+                  "example": 12000
+                },
+                "comment": {
+                  "type": "string",
+                  "example": "Не принят в стирку"
+                }
+              }
+            }
+          },
+          "is_rush": {
+            "type": "boolean",
+            "example": true
+          },
+          "send_date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "createOrderRequest": {
+        "type": "object",
+        "required": [
+          "is_rush",
+          "details"
+        ],
+        "properties": {
+          "is_rush": {
+            "type": "boolean",
+            "example": false
+          },
+          "details": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "units_type",
+                "product_name",
+                "category_name"
+              ],
+              "properties": {
+                "product_name": {
+                  "description": "апи имя продукта",
+                  "type": "string"
+                },
+                "category_name": {
+                  "description": "апи имя категории",
+                  "type": "string"
+                },
+                "units_count": {
+                  "description": "Кол-во в единице измерения",
+                  "type": "number",
+                  "example": 4.75
+                }
+              }
+            }
+          }
+        }
+      },
+      "OrdersResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/MerchantOrder"
+          }
+        }
+      },
+      "getMerchantOrderDocumentsResponse": {
+        "type": "object",
+        "properties": {
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/subjectData"
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "Идентификатор документа",
+                  "type": "string",
+                  "example": 36
+                },
+                "order_id": {
+                  "description": "Идентификатор заказа",
+                  "type": "integer",
+                  "example": 78
+                },
+                "type": {
+                  "$ref": "#/components/schemas/OrderDocumentType"
+                },
+                "preview_image": {
+                  "description": "Превью фото документа в base64",
+                  "type": "string",
+                  "example": "тут base64"
+                }
+              }
             }
           }
         }
       },
-      "getGradeResponse": {
+      "OrderDocumentType": {
+        "description": "Тип документа",
+        "type": "string",
+        "enum": [
+          "bill (счет)",
+          "offer (оферта)",
+          "receipt (квитанция)",
+          "invoice (счет-фактура)",
+          "reconciliation_act (акт сверки)",
+          "acceptance_certificate (акт приема-передачи)"
+        ],
+        "example": "bill"
+      },
+      "getMerchantOrderDocumentContentByTypeResponse": {
         "type": "object",
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/gradeData"
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Идентификатор документа",
+                "type": "string",
+                "example": 36
+              },
+              "content": {
+                "type": "string",
+                "description": "base64 от документа",
+                "example": "тут base64 "
+              }
+            }
           }
         }
       },
-      "getGradesResponse": {
+      "getMerchantOrderDetalisationResponse": {
         "type": "object",
         "properties": {
-          "count": {
-            "description": "Количество записей в массиве данных",
-            "type": "integer",
-            "example": 25
-          },
+          "data": {
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MerchantOrder"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "documents": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "description": "Идентификатор документа",
+                          "type": "string",
+                          "example": 36
+                        },
+                        "type": {
+                          "$ref": "#/components/schemas/OrderDocumentType"
+                        },
+                        "preview_image": {
+                          "description": "base64",
+                          "type": "string",
+                          "example": "тут base64"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "ArchiveDownload": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "archive": {
+                "type": "string",
+                "description": "base64 от архива",
+                "example": "тут base64"
+              }
+            }
+          }
+        }
+      },
+      "getMerchantDocumentsResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "items_count": {
+                "type": "integer",
+                "example": 45
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "description": "Идентификатор документа",
+                      "type": "string",
+                      "example": 36
+                    },
+                    "type": {
+                      "$ref": "#/components/schemas/OrderDocumentType"
+                    },
+                    "date": {
+                      "description": "Дата создания документа",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "preview_image": {
+                      "description": "base64",
+                      "type": "string",
+                      "example": "тут base64"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetMerchantEventResponse": {
+        "type": "object",
+        "properties": {
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/gradeData"
+              "$ref": "#/components/schemas/EventData"
             }
           }
         }
       },
-      "getLevelResponse": {
+      "EventData": {
         "type": "object",
         "properties": {
-          "data": {
-            "$ref": "#/components/schemas/levelData"
-          }
-        }
-      },
-      "getLevelsResponse": {
-        "type": "object",
-        "properties": {
-          "count": {
-            "description": "Количество записей в массиве данных",
-            "type": "integer",
-            "example": 25
+          "id": {
+            "description": "Идентификатор эвента",
+            "type": "string",
+            "example": 36
           },
-          "data": {
+          "periodicity": {
+            "description": "Периодичность",
+            "type": "string",
+            "enum": [
+              "never (никогда)",
+              "every_day (каждый день)",
+              "everyweek (каждую ненелю)",
+              "everymonth (каждый месяц)"
+            ],
+            "example": "everyweek"
+          },
+          "start_date": {
+            "description": "Дата первого события",
+            "type": "string",
+            "format": "date-time"
+          },
+          "next_date": {
+            "description": "Дата следующего события",
+            "type": "string",
+            "format": "date-time"
+          },
+          "merchant_id": {
+            "type": "integer",
+            "example": 45
+          },
+          "orders": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/levelData"
+              "$ref": "#/components/schemas/MerchantOrder"
             }
           }
         }
       },
-      "getEducationSystemResponse": {
+      "CreateEventResponse": {
         "type": "object",
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/educationSystemData"
-          }
-        }
-      },
-      "getEducationSystemsResponse": {
-        "type": "object",
-        "properties": {
-          "count": {
-            "description": "Количество записей в массиве данных",
-            "type": "integer",
-            "example": 25
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/educationSystemData"
-            }
-          }
-        }
-      },
-      "putNotificationResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/notificationData"
-          }
-        }
-      },
-      "getNotificationsResponse": {
-        "type": "object",
-        "properties": {
-          "count": {
-            "description": "Количество записей в массиве данных",
-            "type": "integer",
-            "example": 25
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/notificationData"
-            }
+            "$ref": "#/components/schemas/EventData"
           }
         }
       }

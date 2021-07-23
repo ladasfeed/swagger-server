@@ -27,7 +27,7 @@ export const initMethod = (data: swaggerType) => {
         createFolder(servicePathname)
 
         for (let keyMethods in paths[keyPaths]) {
-            const pathWithoutMethod = servicePathname + `/${keyPaths.replaceAll('/', '')}`
+            const pathWithoutMethod = servicePathname + `/${keyPaths.replaceAll('/', '').replaceAll(':', '')}`
             const pathWithMethod = pathWithoutMethod + '/' + keyMethods
             createFolder(pathWithoutMethod)
             createFolder(pathWithMethod)
@@ -41,7 +41,7 @@ export const initMethod = (data: swaggerType) => {
 
             arrayOfRoutersPathnames.push(
                 serviceNameRaw +
-                `/${keyPaths.replaceAll('/', '')}` +
+                `/${keyPaths.replaceAll('/', '').replaceAll(':', '')}` +
                 '/' + keyMethods
             )
         }

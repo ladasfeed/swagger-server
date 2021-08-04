@@ -1,5 +1,4 @@
 import fs from "fs";
-import {createFileContent} from "./createFileContent";
 
 type createRootFileType = {
     routes: Array<string>,
@@ -17,6 +16,8 @@ export const createRootFile = ({routes, path}:createRootFileType) => {
         path+'/index.ts',
         `export {}
 const app = require('express')()
+const cors = require('cors')
+app.use(cors())
         
 ${bodyHeader}
 ${bodyMain}

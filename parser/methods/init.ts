@@ -2,7 +2,8 @@ import {swaggerType} from "../types";
 const fs = require('fs');
 import {createFile} from "./createRouterFile";
 import {createRootFile} from "./createRootFile";
-const defaultDirname = './dist'
+const folderPath = process.cwd().replace(/[\\]/g, '/')
+const defaultDirname = folderPath+'/dist'
 
 const createServiceName = (str: string) => {
     const serviceIndexDelimiter = str.substr(1).indexOf('/') || undefined

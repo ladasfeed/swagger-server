@@ -1,14 +1,14 @@
 # server-swagger
 Easy way to create your mock server from swagger.
 
-###Requirements
+### Requirements
 - 16.4.0 node version and higher
 - Correct swagger in openapi v3 format
 
-###Installation
+### Installation
 ```npm install server-swagger -g```
 
-###Usage
+### Usage
 - Open terminal
 - Go to folder with swagger.json
 - exec command ```swagger-gen```

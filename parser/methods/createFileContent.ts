@@ -1,7 +1,7 @@
 import {readAndWriteData} from './readAndWriteResponce'
-import {log} from "util";
 
 const normalizeUrl = (url: string) => {
+    //@ts-ignore
     return  url.replaceAll('{', ':').replaceAll('}', '')
 }
 

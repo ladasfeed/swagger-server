@@ -1,20 +1,20 @@
 {
   "name": "server-swagger",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
-  "main": "parser/index.ts",
+  "main": "build/parser/index.js",
   "scripts": {
     "build": "tsc --build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon src/index.ts"
   },
-  "type": "commonjs",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ladasfeed/swagger-server.git"
   },
   "bin": {
-    "swagger-gen": "parser/index.ts"
+    "swagger-gen": "build/parser/index.js"
   },
   "keywords": [],
   "author": "",

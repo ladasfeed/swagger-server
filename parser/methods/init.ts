@@ -1,5 +1,5 @@
 import {swaggerType} from "../types";
-const fs = require('fs');
+import * as fs from 'fs';
 import {createFile} from "./createRouterFile";
 import {createRootFile} from "./createRootFile";
 const folderPath = process.cwd().replace(/[\\]/g, '/')
@@ -28,6 +28,7 @@ export const initMethod = (data: swaggerType) => {
         createFolder(servicePathname)
 
         for (let keyMethods in paths[keyPaths]) {
+            //@ts-ignore
             const pathWithoutMethod = servicePathname + `/${keyPaths.replaceAll('/', '').replaceAll(':', '')}`
             const pathWithMethod = pathWithoutMethod + '/' + keyMethods
             createFolder(pathWithoutMethod)
@@ -42,6 +43,7 @@ export const initMethod = (data: swaggerType) => {
 
             arrayOfRoutersPathnames.push(
                 serviceNameRaw +
+                //@ts-ignore
                 `/${keyPaths.replaceAll('/', '').replaceAll(':', '')}` +
                 '/' + keyMethods
             )

@@ -1,4 +1,6 @@
-const swagger = require('../swagger.json')
+
+const folderPath = process.cwd().replace(/[\\]/g, '/');
+const swagger = require(`${folderPath}/swagger.json`)
 
 const deepSearch = (obj: any) => {
     getProp(obj);

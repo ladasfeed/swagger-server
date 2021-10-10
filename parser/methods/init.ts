@@ -1,7 +1,8 @@
 import {swaggerType} from "../types";
-import * as fs from 'fs';
 import {createFile} from "./createRouterFile";
 import {createRootFile} from "./createRootFile";
+import fs from 'fs';
+
 const folderPath = process.cwd().replace(/[\\]/g, '/')
 const defaultDirname = folderPath+'/dist'
 

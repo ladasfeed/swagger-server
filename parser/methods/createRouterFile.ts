@@ -9,7 +9,7 @@ type createFileType = {
 }
 export const createFile = ({data, method, pathname, url}:createFileType) => {
     fs.writeFile(
-        pathname+'/index.ts',
+        pathname+'/index.js',
         createFileContent({
             data,
             url,

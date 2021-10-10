@@ -1,11 +1,7 @@
 #!/usr/bin/env node
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-
-import { initMethod } from './methods/init.js';
+"use strict";
 const folderPath = process.cwd().replace(/[\\]/g, '/');
 const swaggerRaw = require(folderPath + '/swagger.json');
+const { initMethod } = require('./methods/init');
 const swagger = swaggerRaw;
-
-
 initMethod(swagger);

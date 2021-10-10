@@ -1,11 +1,12 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.readAndWriteData = void 0;
-var swagger = require('../swagger.json');
-var deepSearch = function (obj) {
+const folderPath = process.cwd().replace(/[\\]/g, '/');
+const swagger = require(`${folderPath}/swagger.json`);
+const deepSearch = (obj) => {
     getProp(obj);
     function getProp(o) {
-        for (var prop in o) {
+        for (let prop in o) {
             if (typeof (o[prop]) === 'object') {
                 getProp(o[prop]);
             }
@@ -15,12 +16,12 @@ var deepSearch = function (obj) {
         }
     }
 };
-var readAndWriteData = function (ref) {
-    var newObj = {};
-    var props = ref;
+const readAndWriteData = (ref) => {
+    let newObj = {};
+    let props = ref;
     if (typeof ref == "string") {
-        var pathArray = ref.substr(2).split('/');
-        var field = swagger.components.schemas[pathArray[2]];
+        const pathArray = ref.substr(2).split('/');
+        const field = swagger.components.schemas[pathArray[2]];
         if (field.hasOwnProperty('type') && ['boolean', 'string', 'integer'].includes(field.type)) {
             props = field;
         }
@@ -32,7 +33,7 @@ var readAndWriteData = function (ref) {
         newObj = props.example;
         return newObj;
     }
-    for (var key in props) {
+    for (let key in props) {
         if (props[key].hasOwnProperty('example')) {
             newObj[key] = props[key].example;
         }
@@ -55,5 +56,5 @@ var readAndWriteData = function (ref) {
     return newObj;
 };
 exports.readAndWriteData = readAndWriteData;
-var findByRef = function (ref) {
+const findByRef = (ref) => {
 };

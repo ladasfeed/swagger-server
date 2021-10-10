@@ -1,22 +1,24 @@
-import * as fs from 'fs';
-import { createFile } from "./createRouterFile.js";
-import { createRootFile } from "./createRootFile.js";
-
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.initMethod = void 0;
+const createRouterFile_1 = require("./createRouterFile");
+const createRootFile_1 = require("./createRootFile");
+const fs_1 = __importDefault(require("fs"));
 const folderPath = process.cwd().replace(/[\\]/g, '/');
 const defaultDirname = folderPath + '/dist';
-
-
 const createServiceName = (str) => {
     const serviceIndexDelimiter = str.substr(1).indexOf('/') || undefined;
     return serviceIndexDelimiter != -1 ? str.substr(1, serviceIndexDelimiter) : str.substr(1);
 };
 const createFolder = (path) => {
-    if (!fs.existsSync(path)) {
-        fs.mkdirSync(path);
+    if (!fs_1.default.existsSync(path)) {
+        fs_1.default.mkdirSync(path);
     }
 };
-export const initMethod = (data) => {
+const initMethod = (data) => {
     createFolder(defaultDirname);
     const arrayOfRoutersPathnames = [];
     const paths = data.paths;
@@ -30,7 +32,7 @@ export const initMethod = (data) => {
             const pathWithMethod = pathWithoutMethod + '/' + keyMethods;
             createFolder(pathWithoutMethod);
             createFolder(pathWithMethod);
-            createFile({
+            (0, createRouterFile_1.createFile)({
                 data: paths[keyPaths][keyMethods],
                 pathname: pathWithMethod,
                 method: keyMethods,
@@ -41,9 +43,10 @@ export const initMethod = (data) => {
                 `/${keyPaths.replaceAll('/', '').replaceAll(':', '')}` +
                 '/' + keyMethods);
         }
-        createRootFile({
+        (0, createRootFile_1.createRootFile)({
             routes: arrayOfRoutersPathnames,
             path: './dist'
         });
     }
 };
+exports.initMethod = initMethod;

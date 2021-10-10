@@ -1,8 +1,8 @@
 {
   "name": "server-swagger",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
-  "main": "build/index.js",
+  "main": "build/parser/index.js",
   "scripts": {
     "build": "tsc --build",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,7 +14,7 @@
     "url": "git+https://github.com/ladasfeed/swagger-server.git"
   },
   "bin": {
-    "swagger-gen": "build/index.js"
+    "swagger-gen": "build/parser/index.js"
   },
   "keywords": [],
   "author": "",

@@ -28,7 +28,7 @@ const createRootFile = ({ routes, path }) => {
         bodyHeader += `const route${index} = require('./${item}')\n`;
         bodyMain += `app.use(route${index}) \n`;
     });
-    fs.writeFile(path + '/index.js', `export {}
+    fs.writeFile(path + '/index.js', `
 const app = require('express')()
 const cors = require('cors')
 app.use(cors())

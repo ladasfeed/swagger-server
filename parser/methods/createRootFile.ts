@@ -14,7 +14,7 @@ export const createRootFile = ({routes, path}:createRootFileType) => {
 
     fs.writeFile(
         path+'/index.js',
-        `export {}
+        `
 const app = require('express')()
 const cors = require('cors')
 app.use(cors())

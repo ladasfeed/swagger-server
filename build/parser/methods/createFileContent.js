@@ -13,7 +13,7 @@ const createFileContent = ({ data, method, url }) => {
     if (ref) {
         content = (0, readAndWriteResponce_1.readAndWriteData)(ref);
     }
-    return `export {}
+    return `
 const router = require("express").Router();
 
 router.${method}('${normalizeUrl(url)}', function(req, res) {

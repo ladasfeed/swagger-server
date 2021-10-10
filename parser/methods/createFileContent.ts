@@ -21,7 +21,7 @@ export const createFileContent = ({data,method,url}:createFileContentType) => {
         content = readAndWriteData(ref)
     }
 
-    return `export {}
+    return `
 const router = require("express").Router();
 
 router.${method}('${normalizeUrl(url)}', function(req, res) {

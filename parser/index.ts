@@ -8,7 +8,7 @@ const swagger = swaggerRaw
 initMethod(swagger)
 
 console.log('Success')
-exec(`cd ${folderPath}/dist && npm install express cors classnames --save-dev`,  (error, stdout, stderr) => {
+exec(`cd ${folderPath}/dist && npm install express cors --save-dev`,  (error, stdout, stderr) => {
     if (error) {
         console.log(`error: ${error.message}`);
         return;

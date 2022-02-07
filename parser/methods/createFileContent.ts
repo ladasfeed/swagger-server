@@ -12,20 +12,14 @@ type createFileContentType = {
 }
 export const createFileContent = ({data,method,url}:createFileContentType) => {
     const contentDataObject = Object.entries(data.responses)[0] as any
-    const ref = contentDataObject[1]?.content && contentDataObject[1]?.content['application/json']?.schema['$ref']
 
-
-
-    let content:any = {};
-    if (ref) {
-        content = readAndWriteData(ref)
-    }
 
     return `
+const successResponse = require('./res.json')
 const router = require("express").Router();
 
 router.${method}('${normalizeUrl(url)}', function(req, res) {
-    res.status(${contentDataObject[0]}).json(JSON.parse('${JSON.stringify(content)}'));
+    res.status(${contentDataObject[0]}).json(successResponse);
 });
 
 module.exports = router`

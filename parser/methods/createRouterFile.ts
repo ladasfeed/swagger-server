@@ -1,5 +1,6 @@
 import {createFileContent} from "./createFileContent";
 import * as fs from "fs";
+import {createResponseJson} from "./createResponseJson";
 
 type createFileType = {
     data: any,
@@ -14,6 +15,17 @@ export const createFile = ({data, method, pathname, url}:createFileType) => {
             data,
             url,
             method
+        }),
+        function(err) {
+            if (err) {
+                return console.log(err);
+            }
+        }
+    );
+    fs.writeFile(
+        pathname+'/res.json',
+        createResponseJson({
+            data,
         }),
         function(err) {
             if (err) {

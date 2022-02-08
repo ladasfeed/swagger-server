@@ -1,272 +1,365 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Smart Service Draft API",
+    "title": "LK-BAAS API",
     "version": "1.0.0"
   },
-  "servers": [
-    {
-      "url": "https://api.iqluean.ru/api/v1"
-    }
-  ],
   "paths": {
-    "/user/{user_id}/merchant": {
-      "post": {
-        "tags": [
-          "Merchant"
-        ],
-        "summary": "Регистрация мерча",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateMerchantRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "CREATED",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MerchantFullDataResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Not Authorized (Не авторизован)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      },
+    "/inn": {
       "get": {
         "tags": [
-          "Merchant"
+          "References"
         ],
-        "summary": "Получение мерчей пользователя (в данный момент мерч будет один)",
+        "summary": "Получить ИНН",
+        "operationId": "App\\Controller\\ApiControllerInterface::getInn",
         "parameters": [
           {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetMerchantResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/user/{user_id}/merchant/{merchant_id}": {
-      "put": {
-        "tags": [
-          "Merchant"
-        ],
-        "summary": "Изменение данных мерча",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "merchant_id",
-            "in": "path",
-            "description": "id мерчанта",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/updateMerchantRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getMerchantFullDataResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/user/{user_id}/merchant/{merchant_id}/address": {
-      "get": {
-        "tags": [
-          "Address"
-        ],
-        "summary": "Получить все адреса пользователя",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "merchant_id",
-            "in": "path",
-            "description": "id мерчанта",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "type",
+            "name": "birthday",
             "in": "query",
-            "description": "Тип адреса",
+            "description": "Дата рождения (1990-09-05)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "first_name",
+            "in": "query",
+            "description": "Имя",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "last_name",
+            "in": "query",
+            "description": "Фамилия",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "middle_name",
+            "in": "query",
+            "description": "Отчество",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "passport_series",
+            "in": "query",
+            "description": "Серия паспорта (1234)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "passport_number",
+            "in": "query",
+            "description": "Номер паспорта (123456)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/customerInnData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (Не найдено)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/passport/division_code/{code}": {
+      "get": {
+        "tags": [
+          "References"
+        ],
+        "summary": "Получить подразделение",
+        "description": "Получить подразделение",
+        "operationId": "App\\Controller\\ApiControllerInterface::getDivision",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "description": "Код подразделения",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/divisionData"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Ошибка валидации)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (Не найдено)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/regions": {
+      "get": {
+        "tags": [
+          "References"
+        ],
+        "summary": "Получить список регионов СМЗ",
+        "description": "Получить список регионов СМЗ",
+        "operationId": "App\\Controller\\ApiControllerInterface::getRegions",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/regionsData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (Не найдено)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/activities": {
+      "get": {
+        "tags": [
+          "References"
+        ],
+        "summary": "Получить список видов деятельности",
+        "description": "Получить список видов деятельности",
+        "operationId": "App\\Controller\\ApiControllerInterface::getActivities",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/activitiesData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (Не найдено)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/{user_id}/merchant/{merchant_id}/{registry_type}/registry": {
+      "get": {
+        "tags": [
+          "Registry"
+        ],
+        "summary": "Получение всех реестров мерчанта",
+        "operationId": "App\\Controller\\MerchantControllerInterface::getRegistries",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "ID юзера",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "ID мерчанта",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "registry_type",
+            "in": "path",
+            "description": "Тип реестра",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "taxpayer",
+                "transaction"
+              ]
+            }
+          },
+          {
+            "name": "registry_id",
+            "in": "query",
+            "description": "Фильтр по id реестра",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "statuses",
+            "in": "query",
+            "description": "Фильтр по статусам реестра",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/registryStatuses"
+            }
+          },
+          {
+            "name": "order_by_date",
+            "in": "query",
+            "description": "Сортировка по дате загрзки реестра",
             "required": false,
             "schema": {
               "type": "string",
               "enum": [
-                "delivery",
-                "legal"
+                "asc",
+                "desc"
               ]
+            }
+          },
+          {
+            "name": "date_from",
+            "in": "query",
+            "description": "Фильтр по дате загрузки от | Доступен только для реестра выплат",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "description": "Фильтр по дате загрузки до | Доступен только для реестра выплат",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "amount_from",
+            "in": "query",
+            "description": "Фильтр по сумме реестра от | Доступен только для реестра выплат",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "amount_to",
+            "in": "query",
+            "description": "Фильтр по сумме реестра до | Доступен только для реестра выплат",
+            "required": false,
+            "schema": {
+              "type": "number"
             }
           },
           {
@@ -281,7 +374,7 @@
           {
             "name": "offset",
             "in": "query",
-            "description": "Офсет",
+            "description": "Оффсет",
             "required": false,
             "schema": {
               "type": "integer"
@@ -294,13 +387,23 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/getMerchantAddressesDataResponse"
+                  "$ref": "#/components/schemas/getRegistriesData"
                 }
               }
             }
           },
           "400": {
             "description": "Bad Request (Ошибка валидации)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (Не найдено)",
             "content": {
               "application/json": {
                 "schema": {
@@ -328,51 +431,75 @@
       },
       "post": {
         "tags": [
-          "Address"
+          "Registry"
         ],
-        "summary": "Добавляем адрес",
+        "summary": "Создание реестра",
+        "operationId": "App\\Controller\\MerchantControllerInterface::createRegistry",
         "parameters": [
           {
             "name": "user_id",
             "in": "path",
-            "description": "id пользователя",
+            "description": "ID юзера",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer"
+            }
+          },
+          {
+            "name": "registry_type",
+            "in": "path",
+            "description": "Тип реестра",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "taxpayer",
+                "transaction"
+              ]
             }
           },
           {
             "name": "merchant_id",
             "in": "path",
-            "description": "id мерчанта",
+            "description": "ID мерчанта",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           }
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/CreateAddressRequest"
+                "$ref": "#/components/schemas/byteFileData"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "CREATED",
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/getMerchantAddressDataResponse"
+                  "$ref": "#/components/schemas/responseRegistryIdData"
                 }
               }
             }
           },
           "400": {
             "description": "Bad Request (Ошибка валидации)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (Не найдено)",
             "content": {
               "application/json": {
                 "schema": {
@@ -399,38 +526,52 @@
         ]
       }
     },
-    "/user/{user_id}/merchant/{merchant_id}/address/{address_id}": {
+    "/user/{user_id}/merchant/{merchant_id}/registry/{registry_type}/{registry_id}": {
       "get": {
         "tags": [
-          "Address"
+          "Registry"
         ],
-        "summary": "Получить адрес пользователя",
+        "summary": "Получение реестра по id",
+        "operationId": "App\\Controller\\MerchantControllerInterface::getRegistry",
         "parameters": [
           {
             "name": "user_id",
             "in": "path",
-            "description": "id пользователя",
+            "description": "ID юзера",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
             "name": "merchant_id",
             "in": "path",
-            "description": "id мерчанта",
+            "description": "ID мерчанта",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
-            "name": "address_id",
+            "name": "registry_type",
             "in": "path",
-            "description": "id адреса",
+            "description": "Тип реестра",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "taxpayer",
+                "transaction"
+              ]
+            }
+          },
+          {
+            "name": "registry_id",
+            "in": "path",
+            "description": "ID реестра",
+            "required": true,
+            "schema": {
+              "type": "integer"
             }
           }
         ],
@@ -440,13 +581,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/getMerchantAddressDataResponse"
+                  "$ref": "#/components/schemas/getRegistryData"
                 }
               }
             }
           },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
+          "404": {
+            "description": "Not Found (Не найдено)",
             "content": {
               "application/json": {
                 "schema": {
@@ -471,890 +612,20 @@
             "Bearer": []
           }
         ]
-      },
+      }
+    },
+    "/user/{user_id}/merchant/{merchant_id}/registry/transaction/code/{code}": {
       "put": {
         "tags": [
-          "Address"
+          "Registry"
         ],
-        "summary": "Редактирование адреса",
+        "summary": "Подтверждение проведения платежей",
+        "operationId": "App\\Controller\\MerchantControllerInterface::payout",
         "parameters": [
           {
             "name": "user_id",
             "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "merchant_id",
-            "in": "path",
-            "description": "id мерчанта",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "address_id",
-            "in": "path",
-            "description": "id адреса",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateAddressRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getMerchantAddressDataResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "Address"
-        ],
-        "summary": "Удаление адреса",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "merchant_id",
-            "in": "path",
-            "description": "id мерчанта",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "address_id",
-            "in": "path",
-            "description": "id адреса",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "NO CONTENT"
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/user/{user_id}/merchant/{merchant_id}/order": {
-      "get": {
-        "tags": [
-          "Order"
-        ],
-        "summary": "Получить все заказы пользователя, отсортированые по дате по умолчанию",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "merchant_id",
-            "in": "path",
-            "description": "id мерчанта",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "date_from",
-            "in": "query",
-            "description": "дата от",
-            "required": false,
-            "schema": {
-              "format": "date-time",
-              "type": "string"
-            }
-          },
-          {
-            "name": "date_to",
-            "in": "query",
-            "description": "дата до",
-            "required": false,
-            "schema": {
-              "format": "date-time",
-              "type": "string"
-            }
-          },
-          {
-            "name": "amount_from",
-            "in": "query",
-            "description": "сумма заказ от",
-            "required": false,
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "amount_to",
-            "in": "query",
-            "description": "сумма заказа до",
-            "required": false,
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "statuses",
-            "in": "query",
-            "description": "массив статусов",
-            "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "new (новый)",
-                  "in_processing (в обработке)",
-                  "transferred_to_production (передан в производство)",
-                  "handed_over_to_courier (передан курьеру)",
-                  "completed (завершен)",
-                  "awaiting_courier_appointment (ожидает назначения курьера)",
-                  "canceled (отменен)",
-                  "handed_over_to_receiver (передан приемщику)",
-                  "problem (проблемный)"
-                ]
-              }
-            }
-          },
-          {
-            "name": "is_rush",
-            "in": "query",
-            "description": "Флаг срочности заказа",
-            "required": false,
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "one_time",
-            "in": "query",
-            "description": "Разовый заказ",
-            "required": false,
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "repeat",
-            "in": "query",
-            "description": "Повторяющийся заказ",
-            "required": false,
-            "schema": {
-              "type": "boolean"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getMerchantOrdersResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "Order"
-        ],
-        "summary": "Создание заказа",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "merchant_id",
-            "in": "path",
-            "description": "id мерчанта",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/createOrderRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "CREATED",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OrdersResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/{user_id}/merchant/{merchant_id}/order/{order_id}": {
-      "get": {
-        "tags": [
-          "Order"
-        ],
-        "summary": "Детализация заказа",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "merchant_id",
-            "in": "path",
-            "description": "id мерчанта",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "order_id",
-            "in": "path",
-            "description": "id заказа",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getMerchantOrderDetalisationResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "NOT FOUND (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/{user_id}/merchant/{merchant_id}/order/{order_id}/document": {
-      "get": {
-        "tags": [
-          "Document"
-        ],
-        "summary": "Посмотреть все документы по заказу",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "merchant_id",
-            "in": "path",
-            "description": "id мерчанта",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "order_id",
-            "in": "path",
-            "description": "id заказа",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getMerchantOrderDocumentsResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "NOT FOUND (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/user/{user_id}/merchant/{merchant_id}/order/{order_id}/document:archive": {
-      "get": {
-        "tags": [
-          "Document"
-        ],
-        "summary": "Скачать все документы одного закза архивом",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "merchant_id",
-            "in": "path",
-            "description": "id мерчанта",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "order_id",
-            "in": "path",
-            "description": "id заказа",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ArchiveDownload"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации) или пользователь уже существует",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/user/{user_id}/merchant/{merchant_id}/order/{order_id}/document/{document_type}/{document_id}": {
-      "get": {
-        "tags": [
-          "Document"
-        ],
-        "summary": "Получение base 64 документа заказа",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "merchant_id",
-            "in": "path",
-            "description": "id мерчанта",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "order_id",
-            "in": "path",
-            "description": "id заказа",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "document_type",
-            "in": "path",
-            "description": "тип документа",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/OrderDocumentType"
-            }
-          },
-          {
-            "name": "document_id",
-            "in": "path",
-            "description": "id документа",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getMerchantOrderDocumentContentByTypeResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "NOT FOUND (Не найдено)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/user/{user_id}/merchant/{merchant_id}/order/{order_id}/document/{document_type}:archive": {
-      "get": {
-        "tags": [
-          "Document"
-        ],
-        "summary": "Скачать все документы одного типа одного закза архивом",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "merchant_id",
-            "in": "path",
-            "description": "id мерчанта",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "order_id",
-            "in": "path",
-            "description": "id заказа",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "document_type",
-            "in": "path",
-            "description": "тип документа",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/OrderDocumentType"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ArchiveDownload"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации) или пользователь уже существует",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/user/{user_id}/merchant/{merchant_id}/order/{order_id}/document/{document_type}": {
-      "post": {
-        "tags": [
-          "Document"
-        ],
-        "summary": "Добаление документа",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "merchant_id",
-            "in": "path",
-            "description": "id мерчанта",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "order_id",
-            "in": "path",
-            "description": "id заказа",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "document_type",
-            "in": "path",
-            "description": "тип документа",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/OrderDocumentType"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "CREATED",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getMerchantOrderDocumentsResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации) или пользователь уже существует",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/user/{user_id}/merchant/{merchant_id}/document": {
-      "get": {
-        "tags": [
-          "Document"
-        ],
-        "summary": "Получение документов всех заказов мерчу",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id пользователя",
+            "description": "ID юзера",
             "required": true,
             "schema": {
               "type": "integer"
@@ -1363,380 +634,16 @@
           {
             "name": "merchant_id",
             "in": "path",
-            "description": "id мерча",
+            "description": "ID мерчанта",
             "required": true,
             "schema": {
               "type": "integer"
             }
           },
           {
-            "name": "types",
-            "in": "query",
-            "description": "массив типов",
-            "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/OrderDocumentType"
-              }
-            }
-          },
-          {
-            "name": "date_from",
-            "in": "query",
-            "description": "дата от",
-            "required": false,
-            "schema": {
-              "format": "date-time",
-              "type": "string"
-            }
-          },
-          {
-            "name": "date_to",
-            "in": "query",
-            "description": "дата до",
-            "required": false,
-            "schema": {
-              "format": "date-time",
-              "type": "string"
-            }
-          },
-          {
-            "name": "order_id",
-            "in": "query",
-            "description": "фильр по id заказа",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/getMerchantDocumentsResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации) или пользователь уже существует",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/user/{user_id}/merchant/{merchant_id}/document:archive": {
-      "get": {
-        "tags": [
-          "Document"
-        ],
-        "summary": "Получение документов всех заказов мерчу архивом",
-        "parameters": [
-          {
-            "name": "user_id",
+            "name": "code",
             "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "merchant_id",
-            "in": "path",
-            "description": "id мерча",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "types",
-            "in": "query",
-            "description": "массив типов",
-            "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/OrderDocumentType"
-              }
-            }
-          },
-          {
-            "name": "date_from",
-            "in": "query",
-            "description": "дата от",
-            "required": false,
-            "schema": {
-              "format": "date-time",
-              "type": "string"
-            }
-          },
-          {
-            "name": "date_to",
-            "in": "query",
-            "description": "дата до",
-            "required": false,
-            "schema": {
-              "format": "date-time",
-              "type": "string"
-            }
-          },
-          {
-            "name": "order_id",
-            "in": "query",
-            "description": "фильр по id заказа",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ArchiveDownload"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации) или пользователь уже существует",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/user/{user_id}/merchant/{merchant_id}/event": {
-      "get": {
-        "tags": [
-          "Event"
-        ],
-        "summary": "Получение всех эвентов пользователя",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "merchant_id",
-            "in": "path",
-            "description": "id мерча",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "date_from",
-            "in": "query",
-            "description": "дата от",
-            "required": false,
-            "schema": {
-              "format": "date-time",
-              "type": "string"
-            }
-          },
-          {
-            "name": "date_to",
-            "in": "query",
-            "description": "дата до",
-            "required": false,
-            "schema": {
-              "format": "date-time",
-              "type": "string"
-            }
-          },
-          {
-            "name": "address",
-            "in": "query",
-            "description": "фильтр по адресу. Ожидается id адреса",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetMerchantEventResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "Event"
-        ],
-        "summary": "Создание эвента пользователя",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "merchant_id",
-            "in": "path",
-            "description": "id мерча",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "CREATED",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreateEventResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/{user_id}/merchant/{merchant_id}/event/{event_id}": {
-      "delete": {
-        "tags": [
-          "Event"
-        ],
-        "summary": "Удаление эвента пользователя",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "description": "id пользователя",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "merchant_id",
-            "in": "path",
-            "description": "id мерча",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "event_id",
-            "in": "path",
-            "description": "id эвента",
+            "description": "СМС-код",
             "required": true,
             "schema": {
               "type": "integer"
@@ -1745,114 +652,7 @@
         ],
         "responses": {
           "204": {
-            "description": "NO CONTENT"
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/address": {
-      "get": {
-        "tags": [
-          "Suggestions"
-        ],
-        "summary": "Получить данные адреса",
-        "description": "Получить данные адреса",
-        "parameters": [
-          {
-            "name": "search",
-            "in": "query",
-            "description": "Поисковый запрос",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/suggestionPartyBody"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/addressData"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/suggestions/party": {
-      "get": {
-        "tags": [
-          "Suggestions"
-        ],
-        "summary": "Справочный метод. По поисковой строке отдаёт список доступных компаний",
-        "operationId": "App\\Controller\\MerchantApiControllerInterface::suggestionsParty",
-        "parameters": [
-          {
-            "name": "search",
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/suggestionPartyBody"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/suggestionsParty"
-                }
-              }
-            }
+            "description": "No Content"
           },
           "400": {
             "description": "Bad Request (Ошибка валидации)",
@@ -1884,24 +684,47 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
-    "/bik": {
+    "/user/{user_id}/merchant/{merchant_id}/out-transaction/{out_transaction_id}": {
       "get": {
         "tags": [
-          "Suggestions"
+          "Out Transaction"
         ],
-        "summary": "Отдаёт данные о банке по БИК",
-        "operationId": "App\\Controller\\MerchantApiControllerInterface::getBikInfo",
+        "summary": "Получение выплаты по id",
+        "operationId": "App\\Controller\\MerchantControllerInterface::getOutTransaction",
         "parameters": [
           {
-            "name": "bik",
-            "in": "query",
-            "description": "БИК банка",
+            "name": "user_id",
+            "in": "path",
+            "description": "ID юзера",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "ID мерчанта",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "out_transaction_id",
+            "in": "path",
+            "description": "ID выплаты",
+            "required": true,
+            "schema": {
+              "type": "integer"
             }
           }
         ],
@@ -1911,7 +734,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/getBanksResponse"
+                  "$ref": "#/components/schemas/getOutTransactionData"
                 }
               }
             }
@@ -1954,65 +777,61 @@
         ]
       }
     },
-    "/price": {
+    "/user/{user_id}/merchant/{merchant_id}/out-transaction": {
       "get": {
         "tags": [
-          "Suggestions"
+          "Out Transaction"
         ],
-        "summary": "Получение активного прайса.",
+        "summary": "Получение всех выплат мерчанта",
+        "operationId": "App\\Controller\\MerchantControllerInterface::getOutTransactions",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "ID юзера",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "ID мерчанта",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Лимит",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Оффсет",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PriceResponse"
+                  "$ref": "#/components/schemas/getOutTransactionsData"
                 }
               }
             }
-          },
-          "400": {
-            "description": "Bad Request (Ошибка валидации) или пользователь уже существует",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error (Внутренняя ошибка сервера)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": false
-      }
-    },
-    "/feedback": {
-      "post": {
-        "tags": [
-          "Feedback"
-        ],
-        "summary": "Запрос обратной связи",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateFeedbackRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": "NO CONTENT"
           },
           "400": {
             "description": "Bad Request (Ошибка валидации)",
@@ -2024,6 +843,16 @@
               }
             }
           },
+          "404": {
+            "description": "Not Found (Не найдено)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal Server Error (Внутренняя ошибка сервера)",
             "content": {
@@ -2034,7 +863,314 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/user/{user_id}/merchant/{merchant_id}/transaction/registry/pay": {
+      "post": {
+        "tags": [
+          "Registry"
+        ],
+        "summary": "Запрос на проведение платежей.",
+        "operationId": "App\\Controller\\MerchantControllerInterface::createPay",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "ID юзера",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "ID мерчанта",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/payRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request (Ошибка валидации)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (Не найдено)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/user/{user_id}/merchant/{merchant_id}/self-employed": {
+      "get": {
+        "tags": [
+          "SelfEmployed"
+        ],
+        "summary": "Получение самозанятого",
+        "operationId": "App\\Controller\\MerchantControllerInterface::getSelfEmployedList",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "ID юзера",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "ID мерчанта",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getSelfEmployedListData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (Не найдено)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "SelfEmployed"
+        ],
+        "summary": "Создание самозанятого",
+        "operationId": "App\\Controller\\MerchantControllerInterface::createSelfEmployed",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "ID юзера",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "ID мерчанта",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createSelfEmployedData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getSelfEmployedData"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (Ошибка валидации)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (Не найдено)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/user/{user_id}/merchant/{merchant_id}/self-employed/{self_employed_id}": {
+      "get": {
+        "tags": [
+          "SelfEmployed"
+        ],
+        "summary": "Получение самозанятого",
+        "operationId": "App\\Controller\\MerchantControllerInterface::getSelfEmployed",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "ID юзера",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "description": "ID мерчанта",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "self_employed_id",
+            "in": "path",
+            "description": "ID самозанятого",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getSelfEmployedData"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (Не найдено)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error (Внутренняя ошибка сервера)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     }
   },
@@ -2079,16 +1215,332 @@
         },
         "type": "object"
       },
-      "getMerchantFullDataResponse": {
-        "type": "object",
+      "customerInnData": {
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/MerchantFullData"
+            "$ref": "#/components/schemas/registryData"
           }
-        }
+        },
+        "type": "object"
       },
-      "requisitesData": {
-        "type": "object",
+      "customerInn": {
+        "properties": {
+          "code": {
+            "description": "Статус ответа",
+            "type": "string",
+            "example": "OK"
+          },
+          "inn": {
+            "description": "ИНН",
+            "type": "string",
+            "example": "0123456789"
+          }
+        },
+        "type": "object"
+      },
+      "divisionData": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/division"
+          }
+        },
+        "type": "object"
+      },
+      "division": {
+        "properties": {
+          "value": {
+            "description": "Наименование подразделения",
+            "type": "string",
+            "example": "ОТДЕЛ УФМС РОССИИ ПО ВОРОНЕЖСКОЙ ОБЛ. В ЛЕНИНСКОМ Р-НЕ Г. ВОРОНЕЖА"
+          }
+        },
+        "type": "object"
+      },
+      "regionsData": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/regions"
+          }
+        },
+        "type": "object"
+      },
+      "regions": {
+        "properties": {
+          "regions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/region"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "region": {
+        "properties": {
+          "oktmo": {
+            "description": "ОКТМО региона",
+            "type": "string",
+            "example": "01000000"
+          },
+          "name": {
+            "description": "Наименование региона",
+            "type": "string",
+            "example": "Алтайский край"
+          }
+        },
+        "type": "object"
+      },
+      "activitiesData": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/activitiesList"
+          }
+        },
+        "type": "object"
+      },
+      "activitiesList": {
+        "properties": {
+          "activities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/activity"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "activity": {
+        "properties": {
+          "code": {
+            "description": "ID вида деятельности",
+            "type": "string",
+            "example": "1"
+          },
+          "parent_code": {
+            "description": "ID родительского вида деятельности",
+            "type": "string",
+            "example": null
+          },
+          "description": {
+            "description": "Наименование вида деятельности",
+            "type": "string",
+            "example": "Ремонт"
+          }
+        },
+        "type": "object"
+      },
+      "responseRegistryIdData": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/registryIdData"
+          }
+        },
+        "type": "object"
+      },
+      "registryIdData": {
+        "properties": {
+          "id": {
+            "description": "id Реестра",
+            "type": "integer",
+            "example": 1
+          }
+        },
+        "type": "object"
+      },
+      "byteFileData": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary"
+          }
+        },
+        "type": "object"
+      },
+      "registryStatus": {
+        "properties": {
+          "registry_status": {
+            "type": "string",
+            "enum": [
+              "in_parsing_processing",
+              "parsing_done",
+              "new",
+              "in_payment_processing",
+              "processed",
+              "done",
+              "error",
+              "confirmed_to_pay"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "orderBy": {
+        "properties": {
+          "order_by": {
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "registryStatuses": {
+        "properties": {
+          "statuses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/registryStatus"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "merchantData": {
+        "properties": {
+          "id": {
+            "description": "id мерчанта",
+            "type": "integer",
+            "example": 1
+          },
+          "status": {
+            "description": "Статус мерчанта",
+            "type": "string",
+            "example": "waiting_common_data"
+          },
+          "common": {
+            "$ref": "#/components/schemas/merchantCommonData"
+          },
+          "financial": {
+            "$ref": "#/components/schemas/merchantFinancialData"
+          },
+          "administratrion": {
+            "$ref": "#/components/schemas/merchantAdministrationData"
+          }
+        },
+        "type": "object"
+      },
+      "merchantCommonData": {
+        "properties": {
+          "inn": {
+            "description": "ИНН мерчанта",
+            "type": "string",
+            "example": "123456789012"
+          },
+          "legal_name": {
+            "description": "название мерчанта",
+            "type": "string",
+            "example": "Платежный модуль"
+          },
+          "legal_form": {
+            "description": "емали мерчанта",
+            "type": "string",
+            "example": "ООО"
+          },
+          "email": {
+            "description": "e-mail мерчанта",
+            "type": "string",
+            "example": "email@mail.ru"
+          },
+          "legal_address": {
+            "description": "юр. адрес мерчанта",
+            "type": "string",
+            "example": "Москва ул.Тверская, 45"
+          },
+          "legal_fias_id": {
+            "description": "ФИАС id юр. адреса мерчанта",
+            "type": "string",
+            "example": "b756fe6b-bbd3-44d5-9302-5bfcc740f46e"
+          },
+          "actual_address": {
+            "description": "фактический адрес мерчанта",
+            "type": "string",
+            "example": "Москва ул.Тверская, 45"
+          },
+          "actual_fias_id": {
+            "description": "ФИАС id фактического адреса мерчанта",
+            "type": "string",
+            "example": "b756fe6b-bbd3-44d5-9302-5bfcc740f46e"
+          },
+          "egrul_address": {
+            "description": "Юр. адрес по версии ЕГРЮЛ мерчанта",
+            "type": "string",
+            "example": "Москва ул.Тверская, 45"
+          },
+          "snils": {
+            "description": "СНИЛС мерчанта",
+            "type": "string",
+            "example": "645-370-555 02"
+          }
+        },
+        "type": "object"
+      },
+      "merchantFinancialData": {
+        "properties": {
+          "taxation": {
+            "description": "Система налогообложения",
+            "type": "string",
+            "example": "osn"
+          },
+          "vat_rate": {
+            "description": "Налоговая ставка мерчанта",
+            "type": "string",
+            "example": "18%"
+          },
+          "bank": {
+            "$ref": "#/components/schemas/bank"
+          }
+        },
+        "type": "object"
+      },
+      "merchantAdministrationData": {
+        "properties": {
+          "first_name": {
+            "description": "Имя руководителя",
+            "type": "string",
+            "example": "Иван"
+          },
+          "last_name": {
+            "description": "Фамилия руководителя",
+            "type": "string",
+            "example": "Иванов"
+          },
+          "patronymic": {
+            "description": "Отчество руководителя",
+            "type": "string",
+            "example": "Иванович"
+          },
+          "passport": {
+            "$ref": "#/components/schemas/passport"
+          },
+          "document": {
+            "$ref": "#/components/schemas/document"
+          },
+          "position": {
+            "description": "Должность",
+            "type": "string",
+            "example": "Генеральный директор"
+          },
+          "inn": {
+            "description": "ИНН руководителя",
+            "type": "string",
+            "example": "123456789012"
+          },
+          "registration_address": {
+            "description": "адрес регистрации",
+            "type": "string",
+            "example": "Москва ул.Тверская, 45"
+          },
+          "registration_address_fias_id": {
+            "description": "ФИАС id адреса регистрации",
+            "type": "string",
+            "example": "b756fe6b-bbd3-44d5-9302-5bfcc740f46e"
+          }
+        },
+        "type": "object"
+      },
+      "bank": {
         "properties": {
           "bik": {
             "description": "БИК мерчанта",
@@ -2110,1205 +1562,557 @@
             "type": "string",
             "example": "12345678901234567890"
           }
-        }
-      },
-      "updateMerchantRequest": {
-        "type": "object",
-        "properties": {
-          "adminstration": {
-            "$ref": "#/components/schemas/MerchantAdmistrationData"
-          },
-          "common_data": {
-            "type": "object",
-            "properties": {
-              "inn": {
-                "type": "string",
-                "example": 3664069337
-              },
-              "ogrn": {
-                "type": "string",
-                "example": 1053600591197
-              }
-            }
-          },
-          "requisites_data": {
-            "$ref": "#/components/schemas/requisitesData"
-          }
-        }
-      },
-      "suggestionPartyBody": {
-        "properties": {
-          "search": {
-            "description": "Строка для поиска информации в DaData",
-            "type": "string",
-            "example": "1234567890"
-          }
         },
         "type": "object"
       },
-      "addressData": {
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/addressSuggestions"
-          }
-        },
-        "type": "object"
-      },
-      "addressSuggestions": {
-        "properties": {
-          "address": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/address"
-            }
-          }
-        },
-        "type": "object"
-      },
-      "address": {
-        "properties": {
-          "value": {
-            "type": "string",
-            "example": "г Воронеж, Рабочий пр-кт"
-          },
-          "unrestricted_value": {
-            "type": "string",
-            "example": "Воронежская обл, г Воронеж, Рабочий пр-кт"
-          },
-          "data": {
-            "$ref": "#/components/schemas/addressResponse"
-          }
-        },
-        "type": "object"
-      },
-      "addressResponse": {
-        "properties": {
-          "postal_code": {
-            "type": "string",
-            "example": "394040"
-          },
-          "region_fias_id": {
-            "type": "string",
-            "example": "b756fe6b-bbd3-44d5-9302-5bfcc740f46e"
-          },
-          "region": {
-            "type": "string",
-            "example": "Воронежская"
-          },
-          "city_fias_id": {
-            "type": "string",
-            "example": "5bf5ddff-6353-4a3d-80c4-6fb27f00c6c1"
-          },
-          "city": {
-            "type": "string",
-            "example": "Воронеж"
-          },
-          "settlement_fias_id": {
-            "type": "string",
-            "example": "string"
-          },
-          "settlement": {
-            "type": "string",
-            "example": "string"
-          },
-          "street_fias_id": {
-            "type": "string",
-            "example": "225af9a1-c016-42d7-b2bc-efbe5b8bbc78"
-          },
-          "street": {
-            "type": "string",
-            "example": "Рабочий"
-          },
-          "house_fias_id": {
-            "type": "string",
-            "example": "string"
-          },
-          "house": {
-            "type": "string",
-            "example": "string"
-          },
-          "block_type": {
-            "type": "string",
-            "example": "string"
-          },
-          "block_type_full": {
-            "type": "string",
-            "example": "string"
-          },
-          "block": {
-            "type": "string",
-            "example": "string"
-          },
-          "flat_type": {
-            "type": "string",
-            "example": "string"
-          },
-          "flat_type_full": {
-            "type": "string",
-            "example": "string"
-          },
-          "flat": {
-            "type": "string",
-            "example": "string"
-          },
-          "flat_area": {
-            "type": "string",
-            "example": "string"
-          },
-          "building": {
-            "description": "строение",
-            "example": 456456
-          }
-        },
-        "type": "object"
-      },
-      "getBanksResponse": {
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/getBankData"
-          }
-        },
-        "type": "object"
-      },
-      "getBankData": {
-        "properties": {
-          "corresponding_account": {
-            "description": "Кор счёт",
-            "type": "string",
-            "example": "30101810400000000555"
-          },
-          "bik": {
-            "description": "Бик банка",
-            "type": "string",
-            "example": "044525225"
-          },
-          "name": {
-            "description": "Название банка",
-            "type": "string",
-            "example": "ПАО Название"
-          }
-        },
-        "type": "object"
-      },
-      "suggestionsParty": {
-        "properties": {
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/suggestions"
-            }
-          }
-        },
-        "type": "object"
-      },
-      "suggestions": {
-        "properties": {
-          "suggestions": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/suggestion"
-            }
-          }
-        },
-        "type": "object"
-      },
-      "suggestion": {
-        "properties": {
-          "value": {
-            "description": "Наименование компании одной строкой",
-            "type": "string",
-            "example": "ПАО СБЕРБАНК"
-          },
-          "unrestricted_value": {
-            "description": "Наименование компании одной строкой (полное)",
-            "type": "string",
-            "example": "ПАО СБЕРБАНК"
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/suggestionData"
-            }
-          }
-        },
-        "type": "object"
-      },
-      "suggestionData": {
-        "properties": {
-          "kpp": {
-            "description": "КПП",
-            "type": "string",
-            "example": "773601001"
-          },
-          "capital": {
-            "description": "Поле доступно только при запросе findById/party",
-            "type": "string",
-            "example": null
-          },
-          "management": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/suggestionDataManagement"
-            }
-          },
-          "founders": {
-            "description": "Поле доступно только при запросе findById/party",
-            "type": "string",
-            "example": null
-          },
-          "managers": {
-            "description": "Поле доступно только при запросе findById/party",
-            "type": "string",
-            "example": null
-          },
-          "branch_type": {
-            "description": "Тип подразделения: филиал или головная орг-ция",
-            "type": "string",
-            "example": "MAIN"
-          },
-          "branch_count": {
-            "description": "Количество филиалов",
-            "type": "integer",
-            "example": 88
-          },
-          "source": {
-            "description": "Поле доступно только при запросе findById/party",
-            "type": "string",
-            "example": null
-          },
-          "qc": {
-            "description": "Поле доступно только при запросе findById/party",
-            "type": "string",
-            "example": null
-          },
-          "hid": {
-            "description": "Уникальный идентификатор в Дадате",
-            "type": "string",
-            "example": "145a83ab38c9ad95889a7b894ce57a97cf6f6d5f42932a71331ff18606edecc6"
-          },
-          "type": {
-            "description": "Тип организации: юр. лицо или ИП",
-            "type": "string",
-            "example": "LEGAL"
-          },
-          "state": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/suggestionDataState"
-            }
-          },
-          "opf": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/suggestionDataOpf"
-            }
-          },
-          "name": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/suggestionDataName"
-            }
-          },
-          "inn": {
-            "description": "ИНН",
-            "type": "string",
-            "example": "7707083893"
-          },
-          "ogrn": {
-            "description": "ОГРН",
-            "type": "string",
-            "example": "1027700132195"
-          },
-          "okpo": {
-            "description": "Поле доступно только при запросе findById/party",
-            "type": "string",
-            "example": null
-          },
-          "okved": {
-            "description": "Код ОКВЭД",
-            "type": "string",
-            "example": "64.19"
-          },
-          "okveds": {
-            "description": "Поле доступно только при запросе findById/party",
-            "type": "string",
-            "example": null
-          },
-          "authorities": {
-            "description": "Поле доступно только при запросе findById/party",
-            "type": "string",
-            "example": null
-          },
-          "documents": {
-            "description": "Поле доступно только при запросе findById/party",
-            "type": "string",
-            "example": null
-          },
-          "licenses": {
-            "description": "Поле доступно только при запросе findById/party",
-            "type": "string",
-            "example": null
-          },
-          "finance": {
-            "description": "Поле доступно только при запросе findById/party",
-            "type": "string",
-            "example": null
-          },
-          "address": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/suggestionDataAddress"
-            }
-          },
-          "phones": {
-            "description": "Поле доступно только при запросе findById/party",
-            "type": "string",
-            "example": null
-          },
-          "emails": {
-            "description": "Поле доступно только при запросе findById/party",
-            "type": "string",
-            "example": null
-          },
-          "ogrn_date": {
-            "description": "Дата выдачи ОГРН",
-            "type": "integer",
-            "example": "1029456000000"
-          },
-          "okved_type": {
-            "description": "Версия справочника ОКВЭД (2001 или 2014)",
-            "type": "string",
-            "example": "2014"
-          },
-          "employee_count": {
-            "description": "Поле доступно только при запросе findById/party",
-            "type": "string",
-            "example": null
-          }
-        },
-        "type": "object"
-      },
-      "suggestionDataManagement": {
-        "properties": {
-          "name": {
-            "description": "ФИО руководителя",
-            "type": "string",
-            "example": "Греф Герман Оскарович"
-          },
-          "post": {
-            "description": "должность руководителя",
-            "type": "string",
-            "example": "ПРЕЗИДЕНТ, ПРЕДСЕДАТЕЛЬ ПРАВЛЕНИЯ"
-          },
-          "disqualified": {
-            "description": "Поле доступно только при запросе findById/party",
-            "type": "string",
-            "example": null
-          }
-        },
-        "type": "object"
-      },
-      "suggestionDataState": {
-        "properties": {
-          "status": {
-            "description": "статус организации ",
-            "type": "string",
-            "example": "ACTIVE"
-          },
-          "actuality_date": {
-            "description": "дата актуальности сведений",
-            "type": "integer",
-            "example": 1564012800000
-          },
-          "registration_date": {
-            "description": "дата регистрации",
-            "type": "integer",
-            "example": 677376000000
-          },
-          "liquidation_date": {
-            "description": "дата ликвидации",
-            "type": "string",
-            "example": null
-          }
-        },
-        "type": "object"
-      },
-      "suggestionDataOpf": {
+      "document": {
         "properties": {
           "type": {
-            "description": "версия справочника ОКОПФ (99, 2012 или 2014)",
+            "description": "Тип документа",
             "type": "string",
-            "example": "2014"
-          },
-          "code": {
-            "description": "код ОКОПФ",
-            "type": "string",
-            "example": "12247"
-          },
-          "full": {
-            "description": "полное название ОПФ",
-            "type": "string",
-            "example": "Публичное акционерное общество"
-          },
-          "short": {
-            "description": "краткое название ОПФ",
-            "type": "string",
-            "example": "ПАО"
-          }
-        },
-        "type": "object"
-      },
-      "suggestionDataName": {
-        "properties": {
-          "full_with_opf": {
-            "description": "полное наименование с ОПФ",
-            "type": "string",
-            "example": "ПУБЛИЧНОЕ АКЦИОНЕРНОЕ ОБЩЕСТВО СБЕРБАНК РОССИИ"
-          },
-          "short_with_opf": {
-            "description": "краткое наименование с ОПФ",
-            "type": "string",
-            "example": "ПАО СБЕРБАНК"
-          },
-          "latin": {
-            "description": "наименование на латинице (не заполняется)",
-            "type": "string",
-            "example": null
-          },
-          "full": {
-            "description": "полное наименование",
-            "type": "string",
-            "example": "СБЕРБАНК РОССИИ"
-          },
-          "short": {
-            "description": "краткое наименование",
-            "type": "string",
-            "example": "СБЕРБАНК"
-          }
-        },
-        "type": "object"
-      },
-      "suggestionDataAddress": {
-        "properties": {
-          "value": {
-            "description": "наименование компании одной строкой (для ИП - город проживания)",
-            "type": "string",
-            "example": "г Москва, ул Вавилова, д 19"
-          },
-          "unrestricted_value": {
-            "description": "адрес одной строкой (полный, с индексом) стандартизован, поэтому может отличаться от записанного в ЕГРЮЛ",
-            "type": "string",
-            "example": "117312, г Москва, Академический р-н, ул Вавилова, д 19"
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/suggestionDataAddressData"
-            }
-          }
-        },
-        "type": "object"
-      },
-      "suggestionDataAddressData": {
-        "properties": {
-          "value": {
-            "description": "гранулярный адресй",
-            "type": "string",
-            "example": "..."
-          }
-        },
-        "type": "object"
-      },
-      "PriceResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "object",
-            "properties": {
-              "rush_coefficient": {
-                "type": "number",
-                "description": "коэффициент умножения при нажатиии срочного заказа",
-                "example": 1.5
-              },
-              "price": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/PriceDetalisation"
-                }
-              }
-            }
-          }
-        }
-      },
-      "PriceDetalisation": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "идентификатор категории",
-            "type": "integer",
-            "example": 45
-          },
-          "category_name": {
-            "description": "Название категории для отображения",
-            "type": "string",
-            "example": "Сукно"
-          },
-          "category_api_name": {
-            "description": "Название категории для обработки в апи",
-            "type": "string",
-            "example": "c265195d-df69-4ec2-bc12-2a5cf44c200b"
-          },
-          "crm_id": {
-            "type": "integer",
-            "description": "Идентификатор CRM",
-            "example": 1061621
-          },
-          "products": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ProductsDetalisation"
-            }
-          }
-        }
-      },
-      "ProductsDetalisation": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "идентификатор товара",
-            "example": 39
-          },
-          "product_name": {
-            "description": "Название продукта для отображения в ленде",
-            "type": "string",
-            "example": "сукно настольное"
-          },
-          "product_api_name": {
-            "description": "Название продукта для использования в апи",
-            "type": "string",
-            "example": "c265195d-df69-4ec2-bc12-2a5cf44c200b"
-          },
-          "crm_id": {
-            "type": "integer",
-            "description": "Идентификатор CRM",
-            "example": 1061621
-          },
-          "unit": {
-            "$ref": "#/components/schemas/UnitsTypes"
-          },
-          "price": {
-            "description": "Цена за одну еденицу измерения",
-            "type": "number",
-            "example": 36.2
-          }
-        }
-      },
-      "UnitsTypes": {
-        "description": "Единица измерения",
-        "type": "string",
-        "example": "kilogram",
-        "enum": [
-          "kilogram (килограмм)",
-          "square_meter (квадратный метр)",
-          "piece (штука)",
-          "pairs (пара)"
-        ]
-      },
-      "CreateMerchantRequest": {
-        "type": "object",
-        "required": [
-          "inn",
-          "ogrn"
-        ],
-        "properties": {
-          "inn": {
-            "description": "ИНН",
-            "type": "string",
-            "example": "7707083893"
-          },
-          "ogrn": {
-            "description": "ОГРН",
-            "type": "string",
-            "example": "1027700132195"
-          }
-        }
-      },
-      "MerchantFullDataResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/MerchantFullData"
-          }
-        }
-      },
-      "MerchantAdmistrationData": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "Фио ответственного лица",
-            "example": "Констатинопольский Констатин Констатинович"
-          },
-          "position": {
-            "type": "string",
-            "description": "Должность",
-            "example": "Генеральный директор"
-          },
-          "document": {
-            "description": "Действует на основании",
-            "type": "string",
-            "enum": [
-              "articles_of_association (Устав)",
-              "power_of_attorney (Доверенность)",
-              "trust_management_agreement (Договор доверительного управления)"
-            ],
             "example": "articles_of_association"
+          },
+          "series_and_number": {
+            "description": "Серия и номер документа",
+            "type": "string",
+            "example": "134879"
+          },
+          "issue_date": {
+            "description": "Дата выдачи документа",
+            "type": "string",
+            "example": "13.04.1979"
+          },
+          "issue_institution": {
+            "description": "Кем выдан документ",
+            "type": "string",
+            "example": "ООО Ваши документы"
           }
-        }
+        },
+        "type": "object"
       },
-      "GetMerchantResponse": {
-        "type": "object",
+      "getRegistryData": {
         "properties": {
           "data": {
-            "type": "array",
-            "maxItems": 1,
-            "items": {
-              "$ref": "#/components/schemas/MerchantFullData"
-            }
+            "$ref": "#/components/schemas/registryData"
           }
-        }
+        },
+        "type": "object"
       },
-      "MerchantFullData": {
-        "type": "object",
+      "registryData": {
         "properties": {
           "id": {
+            "description": "id реестра",
             "type": "integer",
-            "example": 45
-          },
-          "common_data": {
-            "type": "object",
-            "properties": {
-              "legal_name": {
-                "type": "string",
-                "description": "Офицальное название мерча",
-                "example": "ИП Констатинопольский К.К."
-              },
-              "inn": {
-                "type": "string",
-                "example": 3664069337
-              },
-              "ogrn": {
-                "type": "string",
-                "example": 1053600591197
-              }
-            }
-          },
-          "adminstration": {
-            "$ref": "#/components/schemas/MerchantAdmistrationData"
-          }
-        }
-      },
-      "CreateFeedbackRequest": {
-        "type": "object",
-        "required": [
-          "phone",
-          "type"
-        ],
-        "properties": {
-          "type": {
-            "description": "Тип обращения",
-            "type": "string",
-            "example": "technical_support",
-            "enum": [
-              "technical_support (техническая поддержка)",
-              "wish (Пожелание / Замечание)",
-              "delivery (доставка вещей)"
-            ]
-          },
-          "phone": {
-            "description": "номер телефона пользователя",
-            "type": "string",
-            "pattern": "/^\\d{11}$/",
-            "example": "79000000000"
-          },
-          "email": {
-            "description": "Почта пользователя",
-            "type": "string",
-            "example": "rererereerere@gmail.com"
-          },
-          "message": {
-            "description": "Сообщение пользователя",
-            "type": "string",
-            "example": "Тут месэдж от пользователя"
-          },
-          "full_name": {
-            "description": "Полное имя пользователя",
-            "type": "string",
-            "example": "Констатинопольский Константин Константинович"
-          },
-          "inn": {
-            "description": "ИНН",
-            "type": "string",
-            "example": "7707083893"
-          },
-          "ogrn": {
-            "description": "ОГРН",
-            "type": "string",
-            "example": "1027700132195"
-          }
-        }
-      },
-      "getMerchantAddressesDataResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "object",
-            "properties": {
-              "items_count": {
-                "type": "integer",
-                "example": 45
-              },
-              "items": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/AddressData"
-                }
-              }
-            }
-          }
-        }
-      },
-      "getMerchantAddressDataResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/AddressData"
-          }
-        }
-      },
-      "AddressData": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Идентификатор адреса",
-            "type": "integer",
-            "example": 45
-          },
-          "type": {
-            "$ref": "#/components/schemas/AddressType"
-          },
-          "full_address": {
-            "description": "полный адрес",
-            "type": "string",
-            "example": "Воронеж, у ленина д 1"
-          },
-          "fias_id": {
-            "type": "string",
-            "example": "225af9a1-c016-42d7-b2bc-efbe5b8bbc78"
-          }
-        }
-      },
-      "CreateAddressRequest": {
-        "type": "object",
-        "required": [
-          "type",
-          "fias_id"
-        ],
-        "properties": {
-          "type": {
-            "$ref": "#/components/schemas/AddressType"
-          },
-          "address": {
-            "description": "Адрес строкой",
-            "type": "string",
-            "example": "Воронеж, у ленина д 1"
-          },
-          "fias_id": {
-            "type": "string",
-            "example": "225af9a1-c016-42d7-b2bc-efbe5b8bbc78"
-          }
-        }
-      },
-      "AddressType": {
-        "description": "Тип адреса",
-        "type": "string",
-        "example": "delivery",
-        "enum": [
-          "delivery (адрес доставки)",
-          "legal (юр адрес)",
-          null
-        ]
-      },
-      "getMerchantOrdersResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "object",
-            "properties": {
-              "items_count": {
-                "type": "integer",
-                "example": 45
-              },
-              "items": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/MerchantOrder"
-                }
-              }
-            }
-          }
-        }
-      },
-      "MerchantOrder": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "example": 45
-          },
-          "event_id": {
-            "type": "integer",
-            "example": 37
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time"
+            "example": 1
           },
           "status": {
+            "description": "Статус реестра",
             "type": "string",
-            "enum": [
-              "new (новый)",
-              "in_processing (в обработке)",
-              "transferred_to_production (передан в производство)",
-              "handed_over_to_courier (передан курьеру)",
-              "completed (завершен)",
-              "awaiting_courier_appointment (ожидает назначения курьера)",
-              "canceled (отменен)",
-              "handed_over_to_receiver (передан приемщику)",
-              "problem (проблемный)"
-            ],
-            "example": "in_processing"
+            "example": "new"
           },
-          "products": {
+          "entry_count": {
+            "description": "Количество обработанных строк в реестре",
+            "type": "integer",
+            "example": 1
+          },
+          "general_count": {
+            "description": "Общее количество строк в реестре",
+            "type": "integer",
+            "example": 1
+          },
+          "registry_name": {
+            "description": "Название реестра",
+            "type": "string",
+            "example": "Название"
+          },
+          "date": {
+            "description": "Дата создания реестра",
+            "type": "string",
+            "example": "2005-08-15T15:52:01+00:00"
+          },
+          "lines": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "product_name": {
-                  "type": "string",
-                  "example": "Белье постельное фасонное, сложное (вышивка, рюши)"
-                },
-                "execution_time": {
-                  "type": "string",
-                  "example": "48 часов"
-                },
-                "product_api_name": {
-                  "description": "Название продукта для обработки в апи",
-                  "type": "string",
-                  "example": "c265195d-df69-4ec2-bc12-2a5cf44c200b"
-                },
-                "category_name": {
-                  "type": "string",
-                  "example": "вышивка, рюши"
-                },
-                "category_api_name": {
-                  "description": "Название категории для обработки в апи",
-                  "type": "string",
-                  "example": "c265195d-df69-4ec2-bc12-2a5cf44c200b"
-                },
-                "unit": {
-                  "$ref": "#/components/schemas/UnitsTypes"
-                },
-                "count": {
-                  "type": "number",
-                  "example": 30
-                },
-                "amount": {
-                  "type": "number",
-                  "example": 12000
-                },
-                "comment": {
-                  "type": "string",
-                  "example": "Не принят в стирку"
-                }
-              }
+              "$ref": "#/components/schemas/registryLine"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "registryLine": {
+        "type": "object",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/transactionLine"
+          },
+          {
+            "$ref": "#/components/schemas/taxpayerLine"
+          }
+        ]
+      },
+      "transactionLine": {
+        "properties": {
+          "id": {
+            "description": "id строки",
+            "type": "integer",
+            "example": 1
+          },
+          "status": {
+            "description": "Статус строки",
+            "type": "string",
+            "enum": [
+              "processed_line",
+              "error_line"
+            ],
+            "example": "processed_line"
+          },
+          "line_number": {
+            "description": "Номер строки",
+            "type": "integer",
+            "example": 4
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/registryLineError"
             }
           },
-          "is_rush": {
+          "transaction": {
+            "$ref": "#/components/schemas/outTransactionData"
+          }
+        },
+        "type": "object"
+      },
+      "taxpayerLine": {
+        "properties": {
+          "id": {
+            "description": "id строки",
+            "type": "integer",
+            "example": 1
+          },
+          "status": {
+            "description": "Статус строки",
+            "type": "string",
+            "enum": [
+              "processed_line",
+              "error_line"
+            ],
+            "example": "processed_line"
+          },
+          "line_number": {
+            "description": "Номер строки",
+            "type": "integer",
+            "example": 4
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/registryLineError"
+            }
+          },
+          "client": {
+            "$ref": "#/components/schemas/merchantSelfEmployed"
+          }
+        },
+        "type": "object"
+      },
+      "merchantSelfEmployed": {
+        "properties": {
+          "id": {
+            "description": "id связи партнер-смз",
+            "type": "integer",
+            "example": 1
+          },
+          "client_id": {
+            "description": "ID клиента в ТБ",
+            "type": "string",
+            "example": "1"
+          },
+          "merchant": {
+            "$ref": "#/components/schemas/merchantData"
+          },
+          "self_employed": {
+            "$ref": "#/components/schemas/selfEmployedData"
+          }
+        },
+        "type": "object"
+      },
+      "registryLineError": {
+        "description": "Ошибка",
+        "type": "string",
+        "example": "Текст ошибки"
+      },
+      "getOutTransactionData": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/outTransactionData"
+          }
+        },
+        "type": "object"
+      },
+      "getOutTransactionsData": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/getOutTransactions"
+          }
+        },
+        "type": "object"
+      },
+      "getOutTransactions": {
+        "properties": {
+          "items_count": {
+            "description": "Общее количество элементов",
+            "type": "integer",
+            "example": 50
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/outTransactionData"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "maskedCardData": {
+        "properties": {
+          "pan": {
+            "description": "Маскированный номер карты",
+            "type": "string",
+            "example": "123456XXXXXXX1234"
+          },
+          "ps": {
+            "description": "Идентификатор платежной системы",
+            "type": "string",
+            "example": "VISA"
+          }
+        },
+        "type": "object"
+      },
+      "payRequest": {
+        "properties": {
+          "out_transactions": {
+            "$ref": "#/components/schemas/payData"
+          }
+        },
+        "type": "object"
+      },
+      "payData": {
+        "properties": {
+          "id": {
+            "description": "id выплаты",
+            "type": "integer",
+            "example": 1
+          },
+          "checked": {
+            "description": "Решение по выплате",
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "type": "object"
+      },
+      "outTransactionData": {
+        "properties": {
+          "id": {
+            "description": "id выплаты",
+            "type": "integer",
+            "example": 1
+          },
+          "payment_date": {
+            "description": "Дата проведения платежа",
+            "type": "string",
+            "example": "2005-08-15T15:52:01+00:00"
+          },
+          "self_employed": {
+            "$ref": "#/components/schemas/selfEmployedDataForResponse"
+          },
+          "amount": {
+            "description": "Сумма выплаты",
+            "type": "number",
+            "example": 75.76
+          },
+          "status": {
+            "description": "Статус выплаты",
+            "type": "string",
+            "example": "new"
+          },
+          "masked_card": {
+            "$ref": "#/components/schemas/maskedCardData"
+          }
+        },
+        "type": "object"
+      },
+      "selfEmployedDataForResponse": {
+        "properties": {
+          "confirmed_by_tax_service": {
+            "description": "ИНН самозанятого",
             "type": "boolean",
             "example": true
           },
-          "send_date": {
+          "inn": {
+            "description": "ИНН самозанятого",
             "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "createOrderRequest": {
-        "type": "object",
-        "required": [
-          "is_rush",
-          "details"
-        ],
-        "properties": {
-          "is_rush": {
-            "type": "boolean",
-            "example": false
+            "example": "123456789012"
           },
-          "details": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "type": "object",
-              "required": [
-                "units_type",
-                "product_name",
-                "category_name"
-              ],
-              "properties": {
-                "product_name": {
-                  "description": "апи имя продукта",
-                  "type": "string"
-                },
-                "category_name": {
-                  "description": "апи имя категории",
-                  "type": "string"
-                },
-                "units_count": {
-                  "description": "Кол-во в единице измерения",
-                  "type": "number",
-                  "example": 4.75
-                }
-              }
-            }
-          }
-        }
-      },
-      "OrdersResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/MerchantOrder"
-          }
-        }
-      },
-      "getMerchantOrderDocumentsResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "description": "Идентификатор документа",
-                  "type": "string",
-                  "example": 36
-                },
-                "order_id": {
-                  "description": "Идентификатор заказа",
-                  "type": "integer",
-                  "example": 78
-                },
-                "type": {
-                  "$ref": "#/components/schemas/OrderDocumentType"
-                },
-                "preview_image": {
-                  "description": "Превью фото документа в base64",
-                  "type": "string",
-                  "example": "тут base64"
-                }
-              }
-            }
-          }
-        }
-      },
-      "OrderDocumentType": {
-        "description": "Тип документа",
-        "type": "string",
-        "enum": [
-          "bill (счет)",
-          "offer (оферта)",
-          "receipt (квитанция)",
-          "invoice (счет-фактура)",
-          "reconciliation_act (акт сверки)",
-          "acceptance_certificate (акт приема-передачи)"
-        ],
-        "example": "bill"
-      },
-      "getMerchantOrderDocumentContentByTypeResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Идентификатор документа",
-                "type": "string",
-                "example": 36
-              },
-              "content": {
-                "type": "string",
-                "description": "base64 от документа",
-                "example": "тут base64 "
-              }
-            }
-          }
-        }
-      },
-      "getMerchantOrderDetalisationResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "object",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MerchantOrder"
-              },
-              {
-                "type": "object",
-                "properties": {
-                  "documents": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "description": "Идентификатор документа",
-                          "type": "string",
-                          "example": 36
-                        },
-                        "type": {
-                          "$ref": "#/components/schemas/OrderDocumentType"
-                        },
-                        "preview_image": {
-                          "description": "base64",
-                          "type": "string",
-                          "example": "тут base64"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            ]
-          }
-        }
-      },
-      "ArchiveDownload": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "object",
-            "properties": {
-              "archive": {
-                "type": "string",
-                "description": "base64 от архива",
-                "example": "тут base64"
-              }
-            }
-          }
-        }
-      },
-      "getMerchantDocumentsResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "object",
-            "properties": {
-              "items_count": {
-                "type": "integer",
-                "example": 45
-              },
-              "items": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "description": "Идентификатор документа",
-                      "type": "string",
-                      "example": 36
-                    },
-                    "type": {
-                      "$ref": "#/components/schemas/OrderDocumentType"
-                    },
-                    "date": {
-                      "description": "Дата создания документа",
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "preview_image": {
-                      "description": "base64",
-                      "type": "string",
-                      "example": "тут base64"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "GetMerchantEventResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/EventData"
-            }
-          }
-        }
-      },
-      "EventData": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Идентификатор эвента",
+          "last_name": {
+            "description": "Фамилия самозанятого",
             "type": "string",
-            "example": 36
+            "example": "Иванов"
           },
-          "periodicity": {
-            "description": "Периодичность",
+          "first_name": {
+            "description": "Имя самозанятого",
+            "type": "string",
+            "example": "Иван"
+          },
+          "middle_name": {
+            "description": "Отчество самозанятого",
+            "type": "string",
+            "example": "Иванович"
+          },
+          "client_type": {
+            "description": "Тип клиента",
             "type": "string",
             "enum": [
-              "never (никогда)",
-              "every_day (каждый день)",
-              "everyweek (каждую ненелю)",
-              "everymonth (каждый месяц)"
+              "selfemployed",
+              "not_selfemployed"
             ],
-            "example": "everyweek"
-          },
-          "start_date": {
-            "description": "Дата первого события",
-            "type": "string",
-            "format": "date-time"
-          },
-          "next_date": {
-            "description": "Дата следующего события",
-            "type": "string",
-            "format": "date-time"
-          },
-          "merchant_id": {
-            "type": "integer",
-            "example": 45
-          },
-          "orders": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/MerchantOrder"
-            }
+            "example": "selfemployed"
           }
-        }
+        },
+        "type": "object"
       },
-      "CreateEventResponse": {
-        "type": "object",
+      "getRegistriesData": {
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/EventData"
+            "$ref": "#/components/schemas/getRegistries"
           }
-        }
+        },
+        "type": "object"
+      },
+      "getRegistries": {
+        "properties": {
+          "items_count": {
+            "description": "Общее количество элементов",
+            "type": "integer",
+            "example": 50
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/registryData"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "getSelfEmployedListData": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/selfEmployedList"
+          }
+        },
+        "type": "object"
+      },
+      "selfEmployedList": {
+        "properties": {
+          "items_count": {
+            "description": "Общее количество элементов",
+            "type": "integer",
+            "example": 50
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/selfEmployedData"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "getSelfEmployedData": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/selfEmployedData"
+          }
+        },
+        "type": "object"
+      },
+      "selfEmployedData": {
+        "properties": {
+          "id": {
+            "description": "ID",
+            "type": "integer",
+            "example": "123"
+          },
+          "first_name": {
+            "description": "Имя",
+            "type": "string",
+            "example": "Иван"
+          },
+          "last_name": {
+            "description": "Фамилия",
+            "type": "string",
+            "example": "Иванов"
+          },
+          "middle_name": {
+            "description": "Отчество",
+            "type": "string",
+            "example": "Иванович"
+          },
+          "phone": {
+            "description": "Номер телефона",
+            "type": "string",
+            "example": "79515483499"
+          },
+          "email": {
+            "description": "e-mail",
+            "type": "string",
+            "example": "email@mail.ru"
+          },
+          "client_type": {
+            "description": "Тип клиента",
+            "type": "string",
+            "enum": [
+              "selfemployed",
+              "not_selfemployed"
+            ],
+            "example": "selfemployed"
+          },
+          "birthday": {
+            "description": "Дата рождения",
+            "type": "string",
+            "example": "2005-08-15"
+          },
+          "citizenship": {
+            "description": "Гражданство",
+            "type": "string",
+            "example": "RUS"
+          },
+          "passport": {
+            "$ref": "#/components/schemas/passport"
+          },
+          "inn": {
+            "description": "ИНН",
+            "type": "string",
+            "example": "123456789012"
+          },
+          "self_employment": {
+            "$ref": "#/components/schemas/self_employment"
+          }
+        },
+        "type": "object"
+      },
+      "createSelfEmployedData": {
+        "properties": {
+          "first_name": {
+            "description": "Имя",
+            "type": "string",
+            "example": "Иван"
+          },
+          "last_name": {
+            "description": "Фамилия",
+            "type": "string",
+            "example": "Иванов"
+          },
+          "middle_name": {
+            "description": "Отчество",
+            "type": "string",
+            "example": "Иванович"
+          },
+          "phone": {
+            "description": "Номер телефона",
+            "type": "string",
+            "example": "79515483499"
+          },
+          "email": {
+            "description": "e-mail",
+            "type": "string",
+            "example": "email@mail.ru"
+          },
+          "client_type": {
+            "description": "Тип клиента",
+            "type": "string",
+            "enum": [
+              "selfemployed",
+              "not_selfemployed"
+            ],
+            "example": "selfemployed"
+          },
+          "birthday": {
+            "description": "Дата рождения",
+            "type": "string",
+            "example": "2005-08-15"
+          },
+          "citizenship": {
+            "description": "Гражданство",
+            "type": "string",
+            "example": "RU"
+          },
+          "passport": {
+            "$ref": "#/components/schemas/passport"
+          },
+          "inn": {
+            "description": "ИНН",
+            "type": "string",
+            "example": "123456789012"
+          },
+          "self_employment": {
+            "$ref": "#/components/schemas/self_employment"
+          }
+        },
+        "type": "object"
+      },
+      "self_employment": {
+        "properties": {
+          "address": {
+            "description": "Регион",
+            "type": "string",
+            "example": "10"
+          },
+          "activities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/activities"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "activities": {
+        "description": "ID вида деятельности",
+        "type": "string",
+        "example": "10"
+      },
+      "passport": {
+        "properties": {
+          "series": {
+            "description": "Серия паспорта",
+            "type": "string",
+            "example": "1234"
+          },
+          "number": {
+            "description": "Номер паспорта",
+            "type": "string",
+            "example": "123456"
+          },
+          "division_code": {
+            "description": "Код подразделения",
+            "type": "string",
+            "example": "139789"
+          },
+          "issuer": {
+            "description": "Кем выдан паспорт",
+            "type": "string",
+            "example": "ОВД Центрального р-на"
+          },
+          "issue_date": {
+            "description": "Дата выдачи паспорта",
+            "type": "string",
+            "example": "13.04.1989"
+          }
+        },
+        "type": "object"
       }
     },
     "securitySchemes": {

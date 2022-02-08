@@ -16,11 +16,9 @@ const deepSearch = (obj: any) => {
 }
 
 export const readAndWriteData = (ref: string | Object) => {
-    console.log('FUCK')
-    console.log(ref)
-
     let newObj:any = {}
     let props:any = ref
+
 
 
     if (typeof ref == "string") {
